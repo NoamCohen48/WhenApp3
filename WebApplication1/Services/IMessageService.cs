@@ -13,10 +13,15 @@ namespace whenAppModel.Services
 
 		public Task<List<Message>> GetMessages(User user);
 
-		public Task<List<Message>> GetMessage(int Id);
+		public Task<Message?> GetMessage(int Id);
 
-		public Task<List<Message>> Update(int Id);
+		public Task<Message?> Update(Message Message);
 
+		public Task<Message?> GetLastMessage(User user);
+
+		public Task<List<Message>> GetAllMessages();
+
+		public Task<Message?> GetLastMessage();
 
 	}
 }

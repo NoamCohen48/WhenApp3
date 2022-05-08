@@ -34,18 +34,63 @@ namespace whenAppModel.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<Message>> GetMessages(User user)
+        public async Task<List<Message>?> GetMessages(User user)
         {
+            var messages = _context.Messages.Where(message => (message.From.Username == user.Username || message.To.Username == user.Username)).OrderByDescending(message => message.Date);
+
+            return await messages.ToListAsync();
+        }
+
+        public async Task<Message?> GetMessage(int Id)
+        {
+            var messages = _context.Messages.Where(message => (message.Id == Id));
+
+            return (Message?)messages;
+        }
+
+        public async Task<Message?> Update(Message Message)
+        {
+            if (Message != null)
+            {
+                await RemoveMessage((Message?)_context.Messages.Where(message => Message.Id == Message.Id));
+                await AddMessage(Message);
+                await _context.SaveChangesAsync();
+            }
+            return Message;
 
         }
 
-        public async Task<List<Message>> GetMessage(int Id)
+        public async Task<Message?> GetLastMessage(User user)
         {
+            if (user != null)
+            {
+                List<Message>? messages = await GetMessages(user);
+                if (messages != null)
+                {
+                    return messages.FirstOrDefault();
+                }
 
+            }
+            return null;
         }
 
-        public async Task<List<Message>> Update(int Id)
+        public async Task<List<Message>> GetAllMessages()
         {
+            return await _context.Messages.ToListAsync();
+        }
+
+        public async Task<Message?> GetLastMessage()
+        {
+            if (_context.Messages != null)
+            {
+                List<Message>? messages = await GetAllMessages();
+                if (messages != null)
+                {
+                    return messages.FirstOrDefault();
+                }
+
+            }
+            return null;
 
         }
     }

@@ -4,7 +4,18 @@ namespace whenAppModel.Models
 {
     public class Message
     {
-       public enum Types
+
+        public Message(int id, User from, User to, DateTime date, Types type, string data)
+        {
+            this.Id = id;
+            this.From = from;
+            this.To = to;
+            this.Date = date;
+            this.Type = type;
+            this.Data = data;
+        }
+
+        public enum Types
         {
             Text,
             Image,
