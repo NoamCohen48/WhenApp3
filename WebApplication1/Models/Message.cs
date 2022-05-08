@@ -5,6 +5,10 @@ namespace whenAppModel.Models
     public class Message
     {
 
+        public Message()
+        { 
+        }
+
         public Message(int id, User from, User to, DateTime date, Types type, string data)
         {
             this.Id = id;

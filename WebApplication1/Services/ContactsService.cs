@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using whenAppModel.Models;
 using whenAppModel.Services;
 using WhenUp;
@@ -51,7 +52,17 @@ namespace whenAppModel.Services
         //Get user by his username.
         public async Task<User?> Get(string Username)
         {
-            return await _context.Users.FindAsync(Username);
+
+            var q = from user in _context.Users
+                    where user.Username == Username
+                    select user;
+
+            if (q.Count() == 0)
+            {
+                return null;
+            } 
+
+            return (User?)q;
         }
 
         //get user bu username and password.

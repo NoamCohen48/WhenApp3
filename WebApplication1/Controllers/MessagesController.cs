@@ -23,7 +23,6 @@ namespace WhenUp.Controllers
 
 
         [HttpGet]
-        [Route("{id}")]
         [ActionName("Index")]
         public async Task<List<Message>> GetMessagesByUser(string id)
         {
@@ -32,7 +31,6 @@ namespace WhenUp.Controllers
         }
 
         [HttpPost]
-        [Route("{id}")]
         [ActionName("Index")]
         public async Task SendMessageToUser(string content, string id)
         {
@@ -52,7 +50,7 @@ namespace WhenUp.Controllers
         }
 
         [HttpGet]
-        [Route("contacts/{id}/messages/{id2}")]
+        [Route("{id2}")]
         [ActionName("Index")]
         public async Task<Message?> GetMessageById(string id, int id2)
         {

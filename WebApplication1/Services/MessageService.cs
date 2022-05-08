@@ -43,9 +43,16 @@ namespace whenAppModel.Services
 
         public async Task<Message?> GetMessage(int Id)
         {
-            var messages = _context.Messages.Where(message => (message.Id == Id));
 
-            return (Message?)messages;
+            var q = from message in _context.Messages
+                    where message.Id == Id
+                    select message;
+
+            var r = await q.ToListAsync();
+
+            if (r.Count == 0)
+                return null;
+            return r[0];
         }
 
         public async Task<Message?> Update(Message Message)
