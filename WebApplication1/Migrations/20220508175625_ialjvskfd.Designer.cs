@@ -11,8 +11,8 @@ using WhenUp;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(WhenAppContext))]
-    [Migration("20220508150319_init")]
-    partial class init
+    [Migration("20220508175625_ialjvskfd")]
+    partial class ialjvskfd
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -93,6 +93,10 @@ namespace WebApplication1.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Server")
                         .IsRequired()
                         .HasColumnType("longtext");
 

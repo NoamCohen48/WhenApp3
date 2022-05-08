@@ -94,6 +94,10 @@ namespace WebApplication1.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Server")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Username1")
                         .HasColumnType("varchar(255)");
 

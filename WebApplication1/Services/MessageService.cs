@@ -36,17 +36,17 @@ namespace whenAppModel.Services
 
         public async Task<List<Message>> GetMessages(User user)
         {
-
+            return null;
         }
 
         public async Task<List<Message>> GetMessage(int Id)
         {
-
+            return null;
         }
 
         public async Task<List<Message>> Update(int Id)
         {
-
+            return null;
         }
     }
 
