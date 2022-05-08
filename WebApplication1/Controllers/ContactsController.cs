@@ -17,7 +17,7 @@ namespace WhenUp.Controllers
     public class ContactsController : Controller
     {
         private readonly IContactsService service;
-        User current_user = new User("admin", "admin", "admin", "ss");
+        User current_user = new User("noam", "admin", "admin", "ss");
 
         public ContactsController(IContactsService _service)
         {
@@ -32,26 +32,24 @@ namespace WhenUp.Controllers
             return await service.GetAllContacts(current_user.Username);
         }
 
-        
+
 
         // POST: Contacts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        [ActionName ("Index")]
-        public async Task<User> AddContact([Bind("Username,Nickname,Password,Avatar")] User user)
+        //[ValidateAntiForgeryToken]
+        [ActionName("Index")]
+        //([fromBody] User user)
+        public async Task<User> AddContact(string to, string add, string server)
         {
-            if (ModelState.IsValid)
-            {
-                return await service.AddContact(current_user.Username, user.Username);
-            }
-            return null;
+            var u = "noam";
+            //return await service.AddContact(current_user.Username, name);
+            return await service.AddContact(to, add);
         }
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        
         [Route("{id}")]
         [HttpGet]
         [ActionName("Index")]
@@ -67,29 +65,23 @@ namespace WhenUp.Controllers
             return user;
         }
 
-        
+
 
         [HttpPut]
-        [ValidateAntiForgeryToken]
-        [Route("{id}")]
+        //[ValidateAntiForgeryToken]
+        [Route("{id1}")]
         [ActionName("Index")]
-        public async Task<User?> UpdateUser(string id, [Bind("Username,Nickname,Password,Avatar")] User user)
+        public async Task<User?> UpdateUser(string id1, string name = null, string server = null)
         {
-            if (id != user.Username)
-            {
-                return null;
-            }
+            User user_old = await service.Get(id1);
 
-            if (ModelState.IsValid)
-            {
-                User user_old = await service.Get(id);
-                user_old.Avatar = user.Avatar;
-                user_old.Password = user.Password;
-                user_old.Nickname = user.Nickname;
-                return await service.Update(user_old, user_old.Username);
-            }
+            if(name != null)
+                user_old.Nickname = name;
 
-            return null;
+            if(server != null)
+                user_old.Password = server;
+            
+            return await service.Update(user_old, user_old.Username);
         }
 
         // POST: Contacts/Delete/5
