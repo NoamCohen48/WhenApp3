@@ -13,6 +13,18 @@ namespace whenAppModel.Services
             _context = context;
         }
 
+        public async Task AddMessage(string from, string to, string content)
+        {
+            var chat = _context.Chats.Where(chat => chat.Compare(from, to)).First();
+            await AddMessage(new Message
+            {
+                Chat = chat,
+                Data = content,
+                Date = DateTime.Now,
+                Type = Message.Types.Text
+            });
+        }
+
         public async Task AddMessage(Message message)
         {
             _context.Messages.Add(message);
