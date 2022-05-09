@@ -24,7 +24,6 @@ namespace whenAppModel.Models
         
         public string Data { get; set; }
 
-
         public Message()
         {
         }

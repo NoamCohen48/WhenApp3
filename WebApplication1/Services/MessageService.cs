@@ -6,6 +6,7 @@ namespace whenAppModel.Services
 {
     public class MessageService : IMessageService
     {
+        /*
         private readonly WhenAppContext _context;
 
         public MessageService(WhenAppContext context)
@@ -100,6 +101,50 @@ namespace whenAppModel.Services
             return null;
 
         }
-    }
+         */
+        public Task AddMessage(Message message)
+        {
+            throw new NotImplementedException();
+        }
 
+        public Task<List<Message>> GetAllMessages()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Message?> GetLastMessage(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Message?> GetLastMessage()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Message?> GetMessage(int Id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Message>> GetMessages(User from, User to)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Message>> GetMessages(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveMessage(Message message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Message?> Update(Message Message)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

@@ -8,7 +8,7 @@ namespace whenAppModel.Services
 {
     public class ContactsService : IContactsService
     {
-
+        /*
         private readonly WhenAppContext _context;
 
         public ContactsService(WhenAppContext context)
@@ -89,6 +89,41 @@ namespace whenAppModel.Services
                 return NewUser;
             }
             return null;
+        }
+        */
+        public Task<User?> Add(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<User?> AddContact(string Username, string ContactName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<User?> Delete(string UserName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<User?> Get(string Username)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<User?> Get(string Username, string Password)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<User>?> GetAllContacts(string Username)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<User?> Update(User NewUser, string OldUserUserName)
+        {
+            throw new NotImplementedException();
         }
     }
 }

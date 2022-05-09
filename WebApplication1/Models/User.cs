@@ -37,15 +37,10 @@ namespace whenAppModel.Models
         public string Password { get; set; }
 
         [Required]
-        [DataType(DataType.Url)]
         [JsonIgnore]
         public string Avatar { get; set; }
 
         [JsonPropertyName("server")]
         public string Server { get; set; } = "thisServer";
-
-        public virtual ICollection<Chat> Chats { get; set; } = new List<Chat>();
-
-
     }
 }
