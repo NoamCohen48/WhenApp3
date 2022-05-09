@@ -6,6 +6,12 @@ namespace WebApplication1.Models
 {
     public class Chat
     {
+        public Chat(string p1, string p2)
+        {
+            this.Person1 = p1;
+            this.Person2 = p2;
+            ICollection<Message> Messages = new List<Message>();
+        }
         [Key]
         [ForeignKey("User")]
         [Column(Order = 0)]
