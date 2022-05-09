@@ -2,7 +2,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WhenUp;
 
@@ -18,9 +17,30 @@ namespace WebApplication1.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "6.0.4")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            modelBuilder.Entity("WebApplication1.Models.Chat", b =>
+                {
+                    b.Property<string>("Person1")
+                        .HasColumnType("varchar(255)")
+                        .HasColumnOrder(0);
+
+                    b.Property<string>("Person2")
+                        .HasColumnType("varchar(255)")
+                        .HasColumnOrder(1);
+
+                    b.Property<string>("Last")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("LastDate")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Person1", "Person2");
+
+                    b.ToTable("Chats");
+                });
 
             modelBuilder.Entity("whenAppModel.Models.Message", b =>
                 {
@@ -28,31 +48,25 @@ namespace WebApplication1.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<string>("ChatPerson1")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("ChatPerson2")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Data")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FromUsername")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ToUsername")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FromUsername");
-
-                    b.HasIndex("ToUsername");
+                    b.HasIndex("ChatPerson1", "ChatPerson2");
 
                     b.ToTable("Messages");
                 });
@@ -63,21 +77,19 @@ namespace WebApplication1.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<int>("Score")
                         .HasColumnType("int");
-
-                    b.Property<string>("User")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -87,63 +99,41 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("whenAppModel.Models.User", b =>
                 {
                     b.Property<string>("Username")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Avatar")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Nickname")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Server")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Username1")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Username");
-
-                    b.HasIndex("Username1");
 
                     b.ToTable("Users");
                 });
 
             modelBuilder.Entity("whenAppModel.Models.Message", b =>
                 {
-                    b.HasOne("whenAppModel.Models.User", "From")
-                        .WithMany()
-                        .HasForeignKey("FromUsername")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("WebApplication1.Models.Chat", "Chat")
+                        .WithMany("Messages")
+                        .HasForeignKey("ChatPerson1", "ChatPerson2");
 
-                    b.HasOne("whenAppModel.Models.User", "To")
-                        .WithMany()
-                        .HasForeignKey("ToUsername")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("From");
-
-                    b.Navigation("To");
+                    b.Navigation("Chat");
                 });
 
-            modelBuilder.Entity("whenAppModel.Models.User", b =>
+            modelBuilder.Entity("WebApplication1.Models.Chat", b =>
                 {
-                    b.HasOne("whenAppModel.Models.User", null)
-                        .WithMany("Contacts")
-                        .HasForeignKey("Username1");
-                });
-
-            modelBuilder.Entity("whenAppModel.Models.User", b =>
-                {
-                    b.Navigation("Contacts");
+                    b.Navigation("Messages");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,26 +1,41 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using whenAppModel.Models;
 
 namespace WebApplication1.Models
 {
     public class Chat
     {
+        public Chat(string p1, string p2)
+        {
+            this.Person1 = p1;
+            this.Person2 = p2;
+            ICollection<Message> Messages = new List<Message>();
+        }
         [Key]
-        public User Person1 { get; set; }
+        [ForeignKey("User")]
+        [Column(Order = 0)]
+        public string Person1 { get; set; }
 
         [Key]
-        public User Person2 { get; set; }
+        [ForeignKey("User")]
+        [Column(Order = 1)]
+        public string Person2 { get; set; }
 
         public ICollection<Message> Messages { get; set; } = new List<Message>();
 
+        public string Last { get; set; }
+
+        public string LastDate { get; set; }
+
         public bool Compare(string p1, string p2)
         {
-            if(p1 == Person1.Username && p2 == Person2.Username)
+            if(p1 == Person1 && p2 == Person2)
             {
                 return true;
             }
 
-            if(p1 == Person2.Username && p2 == Person1.Username)
+            if(p1 == Person2 && p2 == Person1)
             {
                 return true;
             }

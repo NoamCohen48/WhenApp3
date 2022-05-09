@@ -20,10 +20,10 @@ namespace WhenUp
         {
             // Configuring the Name property as the primary
             // key of the Items table
-            //modelBuilder.Entity<User>().HasKey(e => e.Username);
-            //modelBuilder.Entity<Message>().HasKey(e => e.Id);
-            //modelBuilder.Entity<Rating>().HasKey(e => e.Id);
-            //modelBuilder.Entity<Chat>().HasKey(e => e.Person1);
+            modelBuilder.Entity<User>().HasKey(e => e.Username);
+            modelBuilder.Entity<Message>().HasKey(e => e.Id);
+            modelBuilder.Entity<Rating>().HasKey(e => e.Id);
+            modelBuilder.Entity<Chat>().HasKey(e => new { e.Person1, e.Person2 });
 
             base.OnModelCreating(modelBuilder);
         }
@@ -31,6 +31,7 @@ namespace WhenUp
         public DbSet<User> Users { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Rating> Ratings { get; set; }
+        public DbSet<Chat> Chats { get; set; }
 
 
     }

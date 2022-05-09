@@ -45,7 +45,8 @@ namespace WhenUp.Controllers
             {
                 nextId = LastMessage.Id + 1;
             }
-            Message message = new Message(nextId, current_user, To, DateTime.Now, Message.Types.Text, content);
+            //Message message = new Message(nextId, current_user, To, DateTime.Now, Message.Types.Text, content);
+            Message message = new Message();
             await MessagesService.AddMessage(message);
         }
 
@@ -58,7 +59,7 @@ namespace WhenUp.Controllers
             var user = await ContactsService.Get(id);
             if (message != null && user != null)
             {
-                if (message.From == user || message.To == user)
+                //if (message.From == user || message.To == user)
                 {
                     return message;
                 }

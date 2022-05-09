@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WebApplication1.Models;
 using whenAppModel.Models;
 using whenAppModel.Services;
 using WhenUp;
@@ -8,7 +9,6 @@ namespace whenAppModel.Services
 {
     public class ContactsService : IContactsService
     {
-
         private readonly WhenAppContext _context;
 
         public ContactsService(WhenAppContext context)
@@ -23,28 +23,16 @@ namespace whenAppModel.Services
         }
 
         //add contact to user.
-        public async Task<User?> AddContact(string Username, string ContactName)
+        public async Task AddContact(string Username, string ContactName)
         {
-            var user = await Get(Username);
-            var contact = await Get(ContactName);
-
-            if (user != null && contact != null)
-            {
-                if (!user.Contacts.Contains(contact))
-                {
-                    user.Contacts.Add(contact);
-                    await _context.SaveChangesAsync();
-                    return user;
-                }
-            }
-            return null;
-
+            _context.Chats.Add(new Chat(Username, ContactName));
+            await _context.SaveChangesAsync();
         }
 
         public async Task<User?> Delete(string UserName)
         {
-            var user = Get(UserName);
-            _context.Remove(user);
+            var user = await Get(UserName);
+            _context.Users.Remove(user);
             await _context.SaveChangesAsync();
             return null;
         }
@@ -60,9 +48,9 @@ namespace whenAppModel.Services
             if (q.Count() == 0)
             {
                 return null;
-            } 
+            }
 
-            return (User?)q;
+            return q.First();
         }
 
         //get user bu username and password.
@@ -72,10 +60,12 @@ namespace whenAppModel.Services
         }
 
         //return all user contacts.
-        public async Task<List<User>?> GetAllContacts(string Username)
+        public async Task<ICollection<User>?> GetAllContacts(string Username)
         {
-            var user = await Get(Username);
-            return user?.Contacts.ToList();
+            var q1 = _context.Chats.Where(chat => chat.Person1 == Username).Select(chat => chat.Person1);
+            var q2 = _context.Chats.Where(chat => chat.Person2 == Username).Select(chat => chat.Person2);
+            var users = await q1.Union(q2).ToListAsync();
+            return await _context.Users.Where(User => users.Contains(User.Username)).ToListAsync();
         }
 
         public async Task<User?> Update(User NewUser, string OldUserUserName)
@@ -90,5 +80,6 @@ namespace whenAppModel.Services
             }
             return null;
         }
+
     }
 }
