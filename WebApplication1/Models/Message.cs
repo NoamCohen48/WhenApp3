@@ -1,24 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using WebApplication1.Models;
 
 namespace whenAppModel.Models
 {
     public class Message
     {
-
-        public Message()
-        { 
-        }
-
-        public Message(int id, User from, User to, DateTime date, Types type, string data)
-        {
-            this.Id = id;
-            this.From = from;
-            this.To = to;
-            this.Date = date;
-            this.Type = type;
-            this.Data = data;
-        }
-
         public enum Types
         {
             Text,
@@ -30,15 +16,26 @@ namespace whenAppModel.Models
         [Key]
         public int Id { get; set; }
 
-        public virtual User From { get; set; }
-        
-        public virtual User To { get; set; }
-        
+        public Chat Chat { get; set; }
+
         public DateTime Date { get; set; }
         
         public Types Type { get; set; }    
         
-        public string Data { get; set; }    
+        public string Data { get; set; }
 
+
+        public Message()
+        {
+        }
+
+        public Message(int id, Chat chat, DateTime date, Types type, string data)
+        {
+            this.Id = id;
+            this.Chat = chat;
+            this.Date = date;
+            this.Type = type;
+            this.Data = data;
+        }
     }
 }

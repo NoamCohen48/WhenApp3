@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WhenUp;
 
@@ -11,9 +12,10 @@ using WhenUp;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(WhenAppContext))]
-    partial class WhenAppContextModelSnapshot : ModelSnapshot
+    [Migration("20220509070339_dfsdf")]
+    partial class dfsdf
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

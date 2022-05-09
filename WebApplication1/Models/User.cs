@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using WebApplication1.Models;
 
 namespace whenAppModel.Models
 {
@@ -11,8 +12,6 @@ namespace whenAppModel.Models
             Password = string.Empty;
             Nickname = string.Empty;
             Avatar = string.Empty;
-
-            Contacts = new List<User>();
         }
 
         public User(string username, string password, string nickname, string avatar)
@@ -21,8 +20,6 @@ namespace whenAppModel.Models
             Password = password;
             Nickname = nickname;
             Avatar = avatar;
-
-            Contacts = new List<User>();
         }
 
         [Required] 
@@ -45,9 +42,9 @@ namespace whenAppModel.Models
         public string Avatar { get; set; }
 
         [JsonPropertyName("server")]
-        public string Server { get; set; }
+        public string Server { get; set; } = "thisServer";
 
-        public virtual ICollection<User>? Contacts { get; set; }
+        public virtual ICollection<Chat> Chats { get; set; } = new List<Chat>();
 
 
     }
