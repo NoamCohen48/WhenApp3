@@ -7,21 +7,16 @@ namespace whenAppModel.Services
 	{
 		public Task AddMessage(Message message);
 
-		public Task RemoveMessage(Message message);
+		public Task<bool> RemoveMessage(int id);
 
-		public Task<List<Message>> GetMessages(User from, User to);
+		public Task<List<Message>> GetMessages(string p1, string p2);
 
 		public Task<List<Message>> GetMessages(User user);
 
 		public Task<Message?> GetMessage(int Id);
 
-		public Task<Message?> Update(Message Message);
-
-		public Task<Message?> GetLastMessage(User user);
+		public Task<Message?> Update(int id, Message Message);
 
 		public Task<List<Message>> GetAllMessages();
-
-		public Task<Message?> GetLastMessage();
-
 	}
 }

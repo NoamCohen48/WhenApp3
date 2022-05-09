@@ -21,18 +21,16 @@ namespace WhenUp.Controllers
             ContactsService = _service2;
         }
 
-
         [HttpGet]
         [ActionName("Index")]
-        public async Task<List<Message>> GetMessagesByUser(string id)
+        public async Task<ICollection<Message>> GetMessagesByUser(string id)
         {
-            var user = await ContactsService.Get(id);
-            return (List<Message>)await MessagesService.GetMessages(user);
+            return await MessagesService.GetMessages(current_user.Username, id);
         }
 
         [HttpPost]
         [ActionName("Index")]
-        public async Task SendMessageToUser(string content, string id)
+        public async Task SendMessageToUser(string id, string content)
         {
             int nextId;
             var To = await ContactsService.Get(id);
@@ -45,9 +43,12 @@ namespace WhenUp.Controllers
             {
                 nextId = LastMessage.Id + 1;
             }
-            //Message message = new Message(nextId, current_user, To, DateTime.Now, Message.Types.Text, content);
+            Message message = new Message(nextId, current_user, To, DateTime.Now, Message.Types.Text, content);
             Message message = new Message();
-            await MessagesService.AddMessage(message);
+            await MessagesService.AddMessage(new Message
+            {
+
+            });
         }
 
         [HttpGet]
