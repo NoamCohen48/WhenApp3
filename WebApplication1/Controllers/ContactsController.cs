@@ -9,7 +9,7 @@ namespace WhenUp.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("contacts")]
+    [Route("api/[controller]")]
     public class ContactsController : ControllerBase
     {
         private readonly IContactsService service;
@@ -19,6 +19,7 @@ namespace WhenUp.Controllers
         }
 
         [HttpGet]
+        [NonAction]
         public async Task<User> GetCurrentUser()
         {
 
@@ -26,7 +27,6 @@ namespace WhenUp.Controllers
             return await service.Get(user);
         }
 
-        /*
 
         // GET: Contacts - action number 1
         [HttpGet]
@@ -41,29 +41,23 @@ namespace WhenUp.Controllers
             return null;
         }
 
-        //action number 2
-        // POST: Contacts/Create 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //POST: Contacts - action number 2
         [HttpPost]
-        //[ValidateAntiForgeryToken]
         [ActionName("Index")]
-        //([fromBody] User user)
         public async Task AddContact(string id, string name, string server)
         {
-            //return await service.AddContact(current_user.Username, name);
             User currentUser = await GetCurrentUser();
             if (currentUser != null)
             {
-                await service.AddContact(currentUser.Username, id);
+                await service.AddContact(currentUser, id, name, server);
             }
         }
-        */
+        
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-        //action number 3
+        //GET: Contacts/id - action number 2
         [Route("{id}")]
         [HttpGet]
         [ActionName("Index")]
@@ -74,29 +68,33 @@ namespace WhenUp.Controllers
                 return null;
             }
 
-            User user = await service.Get(id);
+            User user = await service.GetContact(id);
 
             return user;
         }
 
 
-        //action number 4
+        //PUT: Contacts/id - action number 2
         [HttpPut]
-        //[ValidateAntiForgeryToken]
-        [Route("{id1}")]
+        [Route("{id}")]
         [ActionName("Index")]
-        public async Task<User?> UpdateUser(string id1, string name = null, string server = null)
+        public async Task<User?> UpdateUser(string id, string name = null, string server = null)
         {
-            User user_old = await service.Get(id1);
+            User oldUser = await service.GetContact(id);
 
-            if (name != null)
-                user_old.Nickname = name;
+            if (oldUser != null)
+            {
+                if (name != null)
+                    oldUser.Nickname = name;
 
-            if (server != null)
-                user_old.Server = server;
+                if (server != null)
+                    oldUser.Server = server;
 
-            return await service.Update(user_old, user_old.Username);
+                return await service.UpdateContact(oldUser, oldUser.Username);
+            }
+            return null;
         }
+
         //action number 5
         // POST: Contacts/Delete/5
         [HttpDelete]
