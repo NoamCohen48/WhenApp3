@@ -9,19 +9,54 @@ using Microsoft.EntityFrameworkCore;
 using WhenUp;
 using whenAppModel.Models;
 using whenAppModel.Services;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace WhenUp.Controllers
 {
     [ApiController]
-    [Route("contacts")]
-    public class ContactsController : Controller
+    [Route("api/[controller]")]
+    public class ContactsController : ControllerBase
     {
         private readonly IContactsService service;
+        public IConfiguration _configuration;
         User current_user = new User("noam", "admin", "admin", "ss");
 
-        public ContactsController(IContactsService _service)
+        public ContactsController(IContactsService _service, IConfiguration config)
         {
             service = _service;
+            _configuration = config;
+        }
+
+        //login
+        [HttpPost]
+        public async Task<IActionResult> Post(string username,string password)
+        {
+            if(await service.Validation(username, password))
+            {
+                var claims = new []
+                {
+                    new Claim(JwtRegisteredClaimNames.Sub, _configuration["JwtParms:Subject"]),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+                    new Claim("UserId", username)
+                };
+
+                var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWTParams:SecretKey"]));
+                var mac = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+                var token = new JwtSecurityToken(
+                    _configuration["JWTParams:Issuer"],
+                    _configuration["JWTParams:Audience"],
+                    claims,
+                    expires: DateTime.UtcNow.AddMinutes(60),
+                    signingCredentials: mac);
+                return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+                    
+            }
+
+
         }
 
         // GET: Contacts - action number 1

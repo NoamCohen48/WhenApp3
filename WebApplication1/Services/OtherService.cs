@@ -18,11 +18,7 @@ namespace WebApplication1.Services
             await _context.SaveChangesAsync();
             return user;
         }
-        //get user by username and password - login
-        public async Task<User?> Get(string Username, string Password)
-        {
 
-            return await _context.Users.FindAsync(Username, Password);
-        }
+
     }
 }
