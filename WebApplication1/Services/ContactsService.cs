@@ -74,30 +74,6 @@ namespace whenAppModel.Services
             //_context.Users.Remove(user);
             //await _context.SaveChangesAsync();
         }
-
-
-
-
-
-
-
-
-
-        public async Task<User?> Add(User user)
-        {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-            return user;
-        }
-        //get user bu username and password.
-        public async Task<User?> Get(string Username, string Password)
-        {
-            return await _context.Users.FindAsync(Username, Password);
-        }
-
         
-
-        
-
     }
 }
