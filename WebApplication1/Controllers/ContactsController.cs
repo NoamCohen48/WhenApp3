@@ -1,62 +1,29 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using WhenUp;
 using whenAppModel.Models;
 using whenAppModel.Services;
-using System.Security.Claims;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WhenUp.Controllers
 {
+    [Authorize]
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("contacts")]
     public class ContactsController : ControllerBase
     {
         private readonly IContactsService service;
-        public IConfiguration _configuration;
-        User current_user = new User("noam", "admin", "admin", "ss");
 
-        public ContactsController(IContactsService _service, IConfiguration config)
+        public async Task<User> GetCurrentUserAsync()
         {
-            service = _service;
-            _configuration = config;
+
+            var user = HttpContext.User.FindFirst("UserId")?.Value;
+            return await service.Get(user);
         }
 
-        //login
-        [HttpPost]
-        public async Task<IActionResult> Post(string username,string password)
+        public ContactsController(IContactsService _service)
         {
-            if(await service.Validation(username, password))
-            {
-                var claims = new []
-                {
-                    new Claim(JwtRegisteredClaimNames.Sub, _configuration["JwtParms:Subject"]),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                    new Claim("UserId", username)
-                };
-
-                var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWTParams:SecretKey"]));
-                var mac = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-                var token = new JwtSecurityToken(
-                    _configuration["JWTParams:Issuer"],
-                    _configuration["JWTParams:Audience"],
-                    claims,
-                    expires: DateTime.UtcNow.AddMinutes(60),
-                    signingCredentials: mac);
-                return Ok(new JwtSecurityTokenHandler().WriteToken(token));
-                    
-            }
-
-
+            service = _service;
         }
 
         // GET: Contacts - action number 1
@@ -64,9 +31,13 @@ namespace WhenUp.Controllers
         [ActionName("Index")]
         public async Task<ICollection<User>> GetAllContacts()
         {
-            return await service.GetAllContacts(current_user.Username);
+            User currentUser = await GetCurrentUserAsync();
+            if (currentUser != null)
+            {
+                return await service.GetAllContacts(currentUser.Username);
+            }
+            return null;
         }
-
 
         //action number 2
         // POST: Contacts/Create 
@@ -111,12 +82,12 @@ namespace WhenUp.Controllers
         {
             User user_old = await service.Get(id1);
 
-            if(name != null)
+            if (name != null)
                 user_old.Nickname = name;
 
-            if(server != null)
+            if (server != null)
                 user_old.Server = server;
-            
+
             return await service.Update(user_old, user_old.Username);
         }
         //action number 5

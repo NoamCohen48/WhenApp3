@@ -56,21 +56,14 @@ namespace whenAppModel.Services
             return user;
         }
 
-        //get user by username and password
-        public async Task<User?> Get(string Username, string Password)
-        {
-
-            return await _context.Users.FindAsync(Username, Password);
-        }
-
         public async Task<bool> Validation(string Username, string Password)
         {
-            var user = await Get(Username, Password);
-            if (user == null)
+            var user = await Get(Username);
+            if (user != null && user.Password == Password)
             {
-                return false;
+                return true;
             }
-            return true;
+            return false;
         }
 
         //update user - action number 4.
