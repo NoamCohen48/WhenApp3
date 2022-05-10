@@ -35,20 +35,7 @@ namespace WhenUp.Controllers
         [ActionName("Index")]
         public async Task SendMessageToUser(string content, string id)
         {
-            int nextId;
-            var To = await ContactsService.Get(id);
-            var LastMessage = await MessagesService.GetLastMessage();
-            if (LastMessage == null)
-            {
-                nextId = 0;
-            }
-            else
-            {
-                nextId = LastMessage.Id + 1;
-            }
-            //Message message = new Message(nextId, current_user, To, DateTime.Now, Message.Types.Text, content);
-            Message message = new Message();
-            await MessagesService.AddMessage(message);
+            await MessagesService.AddMessage(current_user.Username, id, content);
         }
 
         [HttpGet]
