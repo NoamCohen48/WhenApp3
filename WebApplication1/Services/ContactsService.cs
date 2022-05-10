@@ -15,29 +15,26 @@ namespace whenAppModel.Services
         {
             _context = context;
         }
-        public async Task<User?> Add(User user)
+
+        //return all user contacts - action number 1.
+        public async Task<ICollection<User>?> GetAllContacts(string Username)
         {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-            return user;
+            var q1 = _context.Chats.Where(chat => chat.Person1 == Username)
+                .Select(chat => chat.Person1);
+            var q2 = _context.Chats.Where(chat => chat.Person2 == Username)
+                .Select(chat => chat.Person2);
+            var users = await q1.Union(q2).ToListAsync();
+            return await _context.Users.Where(User => users.Contains(User.Username)).ToListAsync();
         }
 
-        //add contact to user.
+        //add contact to user - action number 2.
         public async Task AddContact(string Username, string ContactName)
         {
             _context.Chats.Add(new Chat(Username, ContactName));
             await _context.SaveChangesAsync();
         }
 
-        public async Task<User?> Delete(string UserName)
-        {
-            var user = await Get(UserName);
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-            return null;
-        }
-
-        //Get user by his username.
+        //Get user by his username - action number 3.
         public async Task<User?> Get(string Username)
         {
 
@@ -52,22 +49,7 @@ namespace whenAppModel.Services
 
             return q.First();
         }
-
-        //get user bu username and password.
-        public async Task<User?> Get(string Username, string Password)
-        {
-            return await _context.Users.FindAsync(Username, Password);
-        }
-
-        //return all user contacts.
-        public async Task<ICollection<User>?> GetAllContacts(string Username)
-        {
-            var q1 = _context.Chats.Where(chat => chat.Person1 == Username).Select(chat => chat.Person1);
-            var q2 = _context.Chats.Where(chat => chat.Person2 == Username).Select(chat => chat.Person2);
-            var users = await q1.Union(q2).ToListAsync();
-            return await _context.Users.Where(User => users.Contains(User.Username)).ToListAsync();
-        }
-
+        //update user - action number 4.
         public async Task<User?> Update(User NewUser, string OldUserUserName)
         {
             var OldUser = await Get(OldUserUserName);
@@ -80,6 +62,42 @@ namespace whenAppModel.Services
             }
             return null;
         }
+        //delete user - action number 5.
+        public async Task Delete(string UserName)
+        {
+            var q1 = _context.Chats.Where(chat => chat.Person1 == UserName)
+               .Select(chat => chat.Person1); 
+            var q2 = _context.Chats.Where(chat => chat.Person2 == UserName)
+                .Select(chat => chat.Person2);
+
+            //var user = await Get(UserName);
+            //_context.Users.Remove(user);
+            //await _context.SaveChangesAsync();
+        }
+
+
+
+
+
+
+
+
+
+        public async Task<User?> Add(User user)
+        {
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+            return user;
+        }
+        //get user bu username and password.
+        public async Task<User?> Get(string Username, string Password)
+        {
+            return await _context.Users.FindAsync(Username, Password);
+        }
+
+        
+
+        
 
     }
 }

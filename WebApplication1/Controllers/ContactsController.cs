@@ -24,7 +24,7 @@ namespace WhenUp.Controllers
             service = _service;
         }
 
-        // GET: Contacts
+        // GET: Contacts - action number 1
         [HttpGet]
         [ActionName("Index")]
         public async Task<ICollection<User>> GetAllContacts()
@@ -33,23 +33,24 @@ namespace WhenUp.Controllers
         }
 
 
-
-        // POST: Contacts/Create
+        //action number 2
+        // POST: Contacts/Create 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         //[ValidateAntiForgeryToken]
         [ActionName("Index")]
         //([fromBody] User user)
-        public async Task<User> AddContact(string to, string add, string server)
+        public async Task AddContact(string id, string name, string server)
         {
-            var u = "noam";
             //return await service.AddContact(current_user.Username, name);
-            return await service.AddContact(to, add);
+            await service.AddContact(current_user.Username, id);
         }
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+
+        //action number 3
         [Route("{id}")]
         [HttpGet]
         [ActionName("Index")]
@@ -66,7 +67,7 @@ namespace WhenUp.Controllers
         }
 
 
-
+        //action number 4
         [HttpPut]
         //[ValidateAntiForgeryToken]
         [Route("{id1}")]
@@ -79,11 +80,11 @@ namespace WhenUp.Controllers
                 user_old.Nickname = name;
 
             if(server != null)
-                user_old.Password = server;
+                user_old.Server = server;
             
             return await service.Update(user_old, user_old.Username);
         }
-
+        //action number 5
         // POST: Contacts/Delete/5
         [HttpDelete]
         [ValidateAntiForgeryToken]

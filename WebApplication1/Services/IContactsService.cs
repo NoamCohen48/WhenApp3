@@ -16,7 +16,7 @@ namespace whenAppModel.Services
 
 		public Task<User?> Update(User NewUser, string OldUserUserName);
 
-		public Task<User?> Delete(string UserName);
+		public Task Delete(string UserName);
 
 
 	}

@@ -6,11 +6,21 @@ namespace WebApplication1.Models
 {
     public class Chat
     {
+        public Chat()
+        {
+            this.Person1 = string.Empty;
+            this.Person2 = string.Empty;
+            ICollection<Message> Messages = new List<Message>();
+            Last = string.Empty;
+            LastDate = string.Empty;
+        }
         public Chat(string p1, string p2)
         {
             this.Person1 = p1;
             this.Person2 = p2;
             ICollection<Message> Messages = new List<Message>();
+            Last =string.Empty;
+            LastDate = string.Empty;    
         }
         [Key]
         [ForeignKey("User")]

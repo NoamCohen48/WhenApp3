@@ -10,6 +10,7 @@ namespace WhenUp.Controllers
     [Route("contacts/{id}/messages")]
     public class MessagesController : Controller
     {
+        /*
         private readonly IMessageService MessagesService;
         private readonly IContactsService ContactsService;
 
@@ -66,5 +67,7 @@ namespace WhenUp.Controllers
             }
             return null;
         }
+
+        */
     }
 }

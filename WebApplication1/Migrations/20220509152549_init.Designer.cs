@@ -11,7 +11,7 @@ using WhenUp;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(WhenAppContext))]
-    [Migration("20220509132911_init")]
+    [Migration("20220509152549_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,12 +31,15 @@ namespace WebApplication1.Migrations
                         .HasColumnType("varchar(255)")
                         .HasColumnOrder(1);
 
-                    b.Property<string>("Username")
-                        .HasColumnType("varchar(255)");
+                    b.Property<string>("Last")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("LastDate")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("Person1", "Person2");
-
-                    b.HasIndex("Username");
 
                     b.ToTable("Chats");
                 });
@@ -83,12 +86,12 @@ namespace WebApplication1.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("Score")
-                        .HasColumnType("int");
-
-                    b.Property<string>("User")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<int>("Score")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -121,13 +124,6 @@ namespace WebApplication1.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Chat", b =>
-                {
-                    b.HasOne("whenAppModel.Models.User", null)
-                        .WithMany("Chats")
-                        .HasForeignKey("Username");
-                });
-
             modelBuilder.Entity("whenAppModel.Models.Message", b =>
                 {
                     b.HasOne("WebApplication1.Models.Chat", "Chat")
@@ -140,11 +136,6 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.Chat", b =>
                 {
                     b.Navigation("Messages");
-                });
-
-            modelBuilder.Entity("whenAppModel.Models.User", b =>
-                {
-                    b.Navigation("Chats");
                 });
 #pragma warning restore 612, 618
         }
