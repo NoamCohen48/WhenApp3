@@ -55,6 +55,17 @@ namespace whenAppModel.Services
             await _context.SaveChangesAsync();
             return user;
         }
+
+        public async Task<bool> Validation(string Username, string Password)
+        {
+            var user = await Get(Username);
+            if (user != null && user.Password == Password)
+            {
+                return true;
+            }
+            return false;
+        }
+
         //update user - action number 4.
         public async Task<User?> Update(User NewUser, string OldUserUserName)
         {

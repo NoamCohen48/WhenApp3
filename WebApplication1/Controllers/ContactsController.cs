@@ -1,37 +1,45 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using WhenUp;
 using whenAppModel.Models;
 using whenAppModel.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WhenUp.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("contacts")]
-    public class ContactsController : Controller
+    public class ContactsController : ControllerBase
     {
         private readonly IContactsService service;
-        User current_user = new User("noam", "admin", "admin", "ss");
-
         public ContactsController(IContactsService _service)
         {
             service = _service;
         }
+
+        [HttpGet]
+        public async Task<User> GetCurrentUser()
+        {
+
+            var user = HttpContext.User.FindFirst("UserId")?.Value;
+            return await service.Get(user);
+        }
+
+        /*
 
         // GET: Contacts - action number 1
         [HttpGet]
         [ActionName("Index")]
         public async Task<ICollection<User>> GetAllContacts()
         {
-            return await service.GetAllContacts(current_user.Username);
+            User currentUser = await GetCurrentUser();
+            if (currentUser != null)
+            {
+                return await service.GetAllContacts(currentUser.Username);
+            }
+            return null;
         }
-
 
         //action number 2
         // POST: Contacts/Create 
@@ -44,8 +52,13 @@ namespace WhenUp.Controllers
         public async Task AddContact(string id, string name, string server)
         {
             //return await service.AddContact(current_user.Username, name);
-            await service.AddContact(current_user.Username, id);
+            User currentUser = await GetCurrentUser();
+            if (currentUser != null)
+            {
+                await service.AddContact(currentUser.Username, id);
+            }
         }
+        */
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -76,12 +89,12 @@ namespace WhenUp.Controllers
         {
             User user_old = await service.Get(id1);
 
-            if(name != null)
+            if (name != null)
                 user_old.Nickname = name;
 
-            if(server != null)
+            if (server != null)
                 user_old.Server = server;
-            
+
             return await service.Update(user_old, user_old.Username);
         }
         //action number 5
