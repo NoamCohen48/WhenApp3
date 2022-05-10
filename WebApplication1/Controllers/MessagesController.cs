@@ -10,6 +10,7 @@ namespace WhenUp.Controllers
     [Route("contacts/{id}/messages")]
     public class MessagesController : Controller
     {
+        /*
         private readonly IMessageService MessagesService;
         private readonly IContactsService ContactsService;
 
@@ -34,19 +35,7 @@ namespace WhenUp.Controllers
         [ActionName("Index")]
         public async Task SendMessageToUser(string content, string id)
         {
-            int nextId;
-            var To = await ContactsService.Get(id);
-            var LastMessage = await MessagesService.GetLastMessage();
-            if (LastMessage == null)
-            {
-                nextId = 0;
-            }
-            else
-            {
-                nextId = LastMessage.Id + 1;
-            }
-            Message message = new Message(nextId, current_user, To, DateTime.Now, Message.Types.Text, content);
-            await MessagesService.AddMessage(message);
+            await MessagesService.AddMessage(current_user.Username, id, content);
         }
 
         [HttpGet]
@@ -58,12 +47,14 @@ namespace WhenUp.Controllers
             var user = await ContactsService.Get(id);
             if (message != null && user != null)
             {
-                if (message.From == user || message.To == user)
+                //if (message.From == user || message.To == user)
                 {
                     return message;
                 }
             }
             return null;
         }
+
+        */
     }
 }

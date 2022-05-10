@@ -1,17 +1,35 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using whenAppModel.Models;
 
 #nullable disable
 
 namespace WebApplication1.Migrations
 {
-    public partial class ialjvskfd : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterDatabase()
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Chats",
+                columns: table => new
+                {
+                    Person1 = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Person2 = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Last = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    LastDate = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Chats", x => new { x.Person1, x.Person2 });
+                })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
@@ -20,7 +38,7 @@ namespace WebApplication1.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    User = table.Column<string>(type: "longtext", nullable: false)
+                    Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Description = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -46,18 +64,11 @@ namespace WebApplication1.Migrations
                     Avatar = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Server = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Username1 = table.Column<List<User>>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Username);
-                    table.ForeignKey(
-                        name: "FK_Users_Users_Username1",
-                        column: x => x.Username1,
-                        principalTable: "Users",
-                        principalColumn: "Username");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -67,9 +78,9 @@ namespace WebApplication1.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    FromUsername = table.Column<string>(type: "varchar(255)", nullable: false)
+                    ChatPerson1 = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ToUsername = table.Column<string>(type: "varchar(255)", nullable: false)
+                    ChatPerson2 = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
@@ -80,34 +91,17 @@ namespace WebApplication1.Migrations
                 {
                     table.PrimaryKey("PK_Messages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Messages_Users_FromUsername",
-                        column: x => x.FromUsername,
-                        principalTable: "Users",
-                        principalColumn: "Username",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Messages_Users_ToUsername",
-                        column: x => x.ToUsername,
-                        principalTable: "Users",
-                        principalColumn: "Username",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Messages_Chats_ChatPerson1_ChatPerson2",
+                        columns: x => new { x.ChatPerson1, x.ChatPerson2 },
+                        principalTable: "Chats",
+                        principalColumns: new[] { "Person1", "Person2" });
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_FromUsername",
+                name: "IX_Messages_ChatPerson1_ChatPerson2",
                 table: "Messages",
-                column: "FromUsername");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Messages_ToUsername",
-                table: "Messages",
-                column: "ToUsername");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_Username1",
-                table: "Users",
-                column: "Username1");
+                columns: new[] { "ChatPerson1", "ChatPerson2" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -120,6 +114,9 @@ namespace WebApplication1.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Chats");
         }
     }
 }
