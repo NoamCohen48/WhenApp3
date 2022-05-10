@@ -49,6 +49,12 @@ namespace whenAppModel.Services
 
             return q.First();
         }
+        public async Task<User?> Add(User user)
+        {
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+            return user;
+        }
         //update user - action number 4.
         public async Task<User?> Update(User NewUser, string OldUserUserName)
         {
