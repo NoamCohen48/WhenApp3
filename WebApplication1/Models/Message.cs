@@ -1,5 +1,4 @@
 ﻿ using System.ComponentModel.DataAnnotations;
-using WebApplication1.Models;
 
 namespace whenAppModel.Models
 {
@@ -16,7 +15,7 @@ namespace whenAppModel.Models
         [Key]
         public int Id { get; set; }
 
-        public Chat Chat { get; set; }
+        public Contact Chat { get; set; }
 
         public DateTime Date { get; set; }
         
@@ -28,7 +27,7 @@ namespace whenAppModel.Models
         {
         }
 
-        public Message(int id, Chat chat, DateTime date, Types type, string data)
+        public Message(int id, Contact chat, DateTime date, Types type, string data)
         {
             this.Id = id;
             this.Chat = chat;

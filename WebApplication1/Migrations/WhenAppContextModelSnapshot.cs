@@ -19,15 +19,10 @@ namespace WebApplication1.Migrations
                 .HasAnnotation("ProductVersion", "6.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("WebApplication1.Models.Chat", b =>
+            modelBuilder.Entity("whenAppModel.Models.Contact", b =>
                 {
-                    b.Property<string>("Person1")
-                        .HasColumnType("varchar(255)")
-                        .HasColumnOrder(0);
-
-                    b.Property<string>("Person2")
-                        .HasColumnType("varchar(255)")
-                        .HasColumnOrder(1);
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Last")
                         .IsRequired()
@@ -37,9 +32,23 @@ namespace WebApplication1.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.HasKey("Person1", "Person2");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
-                    b.ToTable("Chats");
+                    b.Property<string>("Server")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Username");
+
+                    b.ToTable("Contacts");
                 });
 
             modelBuilder.Entity("whenAppModel.Models.Message", b =>
@@ -48,10 +57,8 @@ namespace WebApplication1.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("ChatPerson1")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("ChatPerson2")
+                    b.Property<string>("ChatId")
+                        .IsRequired()
                         .HasColumnType("varchar(255)");
 
                     b.Property<string>("Data")
@@ -66,7 +73,7 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChatPerson1", "ChatPerson2");
+                    b.HasIndex("ChatId");
 
                     b.ToTable("Messages");
                 });
@@ -122,18 +129,26 @@ namespace WebApplication1.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("whenAppModel.Models.Message", b =>
+            modelBuilder.Entity("whenAppModel.Models.Contact", b =>
                 {
-                    b.HasOne("WebApplication1.Models.Chat", "Chat")
-                        .WithMany("Messages")
-                        .HasForeignKey("ChatPerson1", "ChatPerson2");
+                    b.HasOne("whenAppModel.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("Username")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Chat");
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Chat", b =>
+            modelBuilder.Entity("whenAppModel.Models.Message", b =>
                 {
-                    b.Navigation("Messages");
+                    b.HasOne("whenAppModel.Models.Contact", "Chat")
+                        .WithMany()
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Chat");
                 });
 #pragma warning restore 612, 618
         }

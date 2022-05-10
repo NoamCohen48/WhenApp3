@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using WebApplication1.Models;
 
 namespace whenAppModel.Models
 {
@@ -42,5 +41,6 @@ namespace whenAppModel.Models
 
         [JsonPropertyName("server")]
         public string Server { get; set; } = "thisServer";
+
     }
 }

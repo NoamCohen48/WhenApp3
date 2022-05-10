@@ -15,7 +15,8 @@ namespace whenAppModel.Services
 
         public async Task AddMessage(string from, string to, string content)
         {
-            var chat = _context.Chats.Where(chat => chat.Compare(from, to)).First();
+            /*
+            var chat = _context.C.Where(chat => chat.Compare(from, to)).First();
             await AddMessage(new Message
             {
                 Chat = chat,
@@ -23,6 +24,7 @@ namespace whenAppModel.Services
                 Date = DateTime.Now,
                 Type = Message.Types.Text
             });
+            */
         }
 
         public async Task AddMessage(Message message)
@@ -35,12 +37,15 @@ namespace whenAppModel.Services
 
         public async Task<List<Message>> GetMessages(string p1, string p2)
         {
+            /*
             var messages = _context.Messages.Where(message =>
             (message.Chat.Person1 == p1 && message.Chat.Person2 == p2) ||
             message.Chat.Person2 == p1 && message.Chat.Person1 == p2)
                 .OrderByDescending(message => message.Date);
 
             return await messages.ToListAsync();
+            */
+            return null;
 
         }
 
@@ -58,11 +63,14 @@ namespace whenAppModel.Services
 
         public async Task<List<Message>?> GetMessages(User user)
         {
+            /*
             var messages = _context.Messages
                 .Where(message => (message.Chat.Person1 == user.Username || message.Chat.Person2 == user.Username))
                 .OrderByDescending(message => message.Date);
 
             return await messages.ToListAsync();
+            */
+            return null;
         }
 
         public async Task<Message?> GetMessage(int Id)

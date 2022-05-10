@@ -1,6 +1,5 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
-using WebApplication1.Models;
 using whenAppModel.Models;
 
 namespace WhenUp
@@ -23,7 +22,7 @@ namespace WhenUp
             modelBuilder.Entity<User>().HasKey(e => e.Username);
             modelBuilder.Entity<Message>().HasKey(e => e.Id);
             modelBuilder.Entity<Rating>().HasKey(e => e.Id);
-            modelBuilder.Entity<Chat>().HasKey(e => new { e.Person1, e.Person2 });
+            modelBuilder.Entity<Contact>().HasKey(e => e.Id);
 
             base.OnModelCreating(modelBuilder);
         }
@@ -31,7 +30,7 @@ namespace WhenUp
         public DbSet<User> Users { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Rating> Ratings { get; set; }
-        public DbSet<Chat> Chats { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
 
 
     }
