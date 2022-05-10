@@ -95,5 +95,7 @@ namespace WhenUp.Controllers
             await service.Delete(id);
         }
 
+
+
     }
 }
