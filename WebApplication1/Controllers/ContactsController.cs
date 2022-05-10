@@ -34,17 +34,17 @@ namespace WhenUp.Controllers
         // GET: Contacts - action number 1
         [HttpGet]
         [ActionName("Index")]
-        public async Task<ICollection<User>> GetAllContacts()
+        public async Task<ICollection<Contact>> GetAllContacts()
         {
             User currentUser = await GetCurrentUser();
             if (currentUser != null)
             {
-                return await contactService.GetAllContacts(currentUser.Username);
+                return await contactService.GetAllContacts(currentUser);
             }
             return null;
         }
 
-        //POST: Contacts - action number 2
+        //POST: Contacts - action number 1
         [HttpPost]
         [ActionName("Index")]
         public async Task AddContact(string id, string name, string server)
@@ -64,16 +64,16 @@ namespace WhenUp.Controllers
         [Route("{id}")]
         [HttpGet]
         [ActionName("Index")]
-        public async Task<User?> GetDetails(string id)
+        public async Task<Contact?> GetDetails(string id)
         {
             if (id == null)
             {
                 return null;
             }
 
-            User user = await contactService.GetContact(id);
+            Contact contact = await contactService.GetContact(id);
 
-            return user;
+            return contact;
         }
 
 
@@ -81,35 +81,30 @@ namespace WhenUp.Controllers
         [HttpPut]
         [Route("{id}")]
         [ActionName("Index")]
-        public async Task<User?> UpdateUser(string id, string name = null, string server = null)
+        public async Task<Contact?> UpdateContact(string id, string name = null, string server = null)
         {
-            User oldUser = await contactService.GetContact(id);
+            Contact oldContact = await contactService.GetContact(id);
 
-            if (oldUser != null)
+            if (oldContact != null)
             {
                 if (name != null)
-                    oldUser.Nickname = name;
+                    oldContact.Name = name;
 
                 if (server != null)
-                    oldUser.Server = server;
+                    oldContact.Server = server;
 
-                return await contactService.UpdateContact(oldUser, oldUser.Username);
+                return await contactService.UpdateContact(oldContact, oldContact.Id);
             }
             return null;
         }
 
-        //action number 5
-        // POST: Contacts/Delete/5
+        //POST: Contacts/id - action number 2
         [HttpDelete]
-        [ValidateAntiForgeryToken]
         [Route("{id}")]
         [ActionName("Index")]
-        public async Task DeleteConfirmed(string id)
+        public async Task DeleteContact(string id)
         {
-            await userService.Delete(id);
+            await contactService.DeleteContact(id);
         }
-
-
-
     }
 }

@@ -8,22 +8,27 @@ namespace whenAppModel.Services
     public class ContactsService : IContactsService
     {
         private readonly WhenAppContext _context;
-        private readonly IUsersService userService;
+        private readonly IUsersService _userService;
 
 
-        public ContactsService(WhenAppContext context)
+        public ContactsService(WhenAppContext context, IUsersService userService)
         {
             _context = context;
+            _userService = userService;
         }
 
         //TO-DO: Function that return all the user contacts.
-        public async Task<ICollection<User>?> GetAllContacts(string Username)
+        public async Task<ICollection<Contact>?> GetAllContacts(User user)
         {
+            if (user != null)
+            {
+                return _context.Contacts.Where(contact => contact.User == user).ToList();
+            }
             return null;
         }
 
         //TO-DO: Function that return the user in contact format(id, name, server, last, lastdate)
-        public async Task<User?> GetContact(string Username)
+        public async Task<Contact?> GetContact(string id)
         {
             return null;
         }
@@ -35,7 +40,7 @@ namespace whenAppModel.Services
         }
 
         //TO-DO: Function that update contact.
-        public async Task<User?> UpdateContact(User NewUser, string OldUserUserName)
+        public async Task<Contact?> UpdateContact(Contact NewUser, string OldUserUserName)
         {
             return null;
         }
@@ -44,6 +49,17 @@ namespace whenAppModel.Services
         public async Task DeleteContact(string UserName)
         {
         }
+
+        public async Task<bool> Validation(string Username, string Password)
+        {
+            var user = await _userService.Get(Username);
+            if (user != null && user.Password == Password)
+            {
+                return true;
+            }
+            return false;
+        }
+
 
     }
 }

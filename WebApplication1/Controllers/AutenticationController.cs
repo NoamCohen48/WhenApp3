@@ -4,7 +4,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using whenAppModel.Services;
-using whenAppModel.Models;
 
 namespace WebApplication1.Controllers
 {
@@ -15,10 +14,10 @@ namespace WebApplication1.Controllers
     {
 
         public IConfiguration _configuration;
-        private readonly IUsersService service;
+        private readonly IContactsService service;
 
 
-        public AutenticationController(IUsersService _service, IConfiguration config)
+        public AutenticationController(IConfiguration config, IContactsService _service)
         {
             service = _service;
             _configuration = config;

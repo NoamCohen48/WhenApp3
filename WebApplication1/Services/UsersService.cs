@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using whenAppModel.Models;
-using whenAppModel.Services;
+﻿using whenAppModel.Models;
 using WhenUp;
 
 namespace whenAppModel.Services
 {
+
     public class UsersService : IUsersService
     {
         private readonly WhenAppContext _context;
@@ -36,17 +34,6 @@ namespace whenAppModel.Services
             await _context.SaveChangesAsync();
             return user;
         }
-
-        public async Task<bool> Validation(string Username, string Password)
-        {
-            var user = await Get(Username);
-            if (user != null && user.Password == Password)
-            {
-                return true;
-            }
-            return false;
-        }
-
         //delete user - action number 5.
         public async Task Delete(string UserName)
         {
