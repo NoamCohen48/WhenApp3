@@ -8,13 +8,13 @@ namespace whenAppModel.Services
     public class ContactsService : IContactsService
     {
         private readonly WhenAppContext _context;
-        private readonly IUsersService _userService;
+        //private readonly UsersService _userService;
 
 
-        public ContactsService(WhenAppContext context, IUsersService userService)
+        public ContactsService(WhenAppContext context)
         {
             _context = context;
-            _userService = userService;
+           // _userService = userService;
         }
 
         //TO-DO: Function that return all the user contacts.
@@ -50,15 +50,7 @@ namespace whenAppModel.Services
         {
         }
 
-        public async Task<bool> Validation(string Username, string Password)
-        {
-            var user = await _userService.Get(Username);
-            if (user != null && user.Password == Password)
-            {
-                return true;
-            }
-            return false;
-        }
+        
 
 
     }
