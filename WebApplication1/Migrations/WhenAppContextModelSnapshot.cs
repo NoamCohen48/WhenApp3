@@ -113,6 +113,28 @@ namespace WebApplication1.Migrations
 
                     b.ToTable("Users");
                 });
+
+            modelBuilder.Entity("whenAppModel.Models.Contact", b =>
+                {
+                    b.HasOne("whenAppModel.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("Username")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("whenAppModel.Models.Message", b =>
+                {
+                    b.HasOne("whenAppModel.Models.Contact", "Chat")
+                        .WithMany()
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Chat");
+                });
 #pragma warning restore 612, 618
         }
     }
