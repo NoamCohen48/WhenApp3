@@ -12,7 +12,7 @@ namespace whenAppModel.Services
 
 		public Task<ICollection<Contact>?> GetAllContacts(User user);
 
-		public Task<Contact?> UpdateContact(Contact NewUser, string OldUserUserName);
+		public Task UpdateContact(string id, string name, string server);
 
 		public Task DeleteContact(string UserName);
 
