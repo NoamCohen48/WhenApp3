@@ -16,8 +16,5 @@ namespace whenAppModel.Services
 
 		public Task DeleteContact(string UserName);
 
-		public Task<bool> Validation(string Username, string Password);
-
-
 	}
 }

@@ -11,8 +11,8 @@ using WhenUp;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(WhenAppContext))]
-    [Migration("20220510220139_init")]
-    partial class init
+    [Migration("20220511061447_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

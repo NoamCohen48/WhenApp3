@@ -14,10 +14,10 @@ namespace WebApplication1.Controllers
     {
 
         public IConfiguration _configuration;
-        private readonly IContactsService service;
+        private readonly IUsersService service;
 
 
-        public AutenticationController(IConfiguration config, IContactsService _service)
+        public AutenticationController(IConfiguration config, IUsersService _service)
         {
             service = _service;
             _configuration = config;

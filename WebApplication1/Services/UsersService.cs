@@ -41,6 +41,16 @@ namespace whenAppModel.Services
             //_context.Users.Remove(user);
             //await _context.SaveChangesAsync();
         }
-        
+
+        public async Task<bool> Validation(string Username, string Password)
+        {
+            var user = await Get(Username);
+            if (user != null && user.Password == Password)
+            {
+            return true;
+            }
+            return false;
+        }
+
     }
 }
