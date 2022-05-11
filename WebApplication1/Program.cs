@@ -16,7 +16,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<WhenAppContext>();
 builder.Services.AddScoped<IContactsService, ContactsService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
-
+builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.RequireHttpsMetadata = false;

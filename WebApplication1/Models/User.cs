@@ -8,17 +8,12 @@ namespace whenAppModel.Models
         public User()
         {
             Username = string.Empty;
-            Password = string.Empty;
-            Nickname = string.Empty;
-            Avatar = string.Empty;
+            Password = string.Empty;  
         }
-
-        public User(string username, string password, string nickname, string avatar)
+        public User(string username, string password)
         {
             Username = username;
             Password = password;
-            Nickname = nickname;
-            Avatar = avatar;
         }
 
         [Required] 
@@ -26,21 +21,12 @@ namespace whenAppModel.Models
         [JsonPropertyName("id")]
         public string Username { get; set; }
 
-        [Required]
-        [JsonPropertyName("name")]
-        public string Nickname { get; set; }
+       
 
         [RegularExpression("^(? !.* )(?=.*'\'d)(?=.*[A - Z]).{8,}$")]
         [Required]
         [JsonIgnore]
         public string Password { get; set; }
-
-        [Required]
-        [JsonIgnore]
-        public string Avatar { get; set; }
-
-        [JsonPropertyName("server")]
-        public string Server { get; set; } = "thisServer";
 
     }
 }

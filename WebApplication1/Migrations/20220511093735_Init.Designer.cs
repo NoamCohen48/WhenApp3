@@ -11,7 +11,7 @@ using WhenUp;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(WhenAppContext))]
-    [Migration("20220511061447_Init")]
+    [Migration("20220511093735_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,23 +59,22 @@ namespace WebApplication1.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("ChatId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("Data")
+                    b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("Created")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
+                    b.Property<string>("From")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("To")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ChatId");
 
                     b.ToTable("Messages");
                 });
@@ -110,19 +109,7 @@ namespace WebApplication1.Migrations
                     b.Property<string>("Username")
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("Avatar")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Nickname")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Server")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -140,17 +127,6 @@ namespace WebApplication1.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("whenAppModel.Models.Message", b =>
-                {
-                    b.HasOne("whenAppModel.Models.Contact", "Chat")
-                        .WithMany()
-                        .HasForeignKey("ChatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Chat");
                 });
 #pragma warning restore 612, 618
         }

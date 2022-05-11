@@ -13,6 +13,33 @@ namespace whenAppModel.Services
             _context = context;
         }
 
+        public async Task<ICollection<Message>> GetAllMessages()
+        {
+            return await _context.Messages.ToListAsync();
+        }
+
+        public async Task<ICollection<Message>?> GetMessages(string current_user, string contact_user)
+        {
+            var q1 = _context.Messages
+                .Where(message => message.From == current_user && message.To == contact_user);
+            //.Select(message => new {id = message.Id, content = message.Content, created = message.Created,
+            //sent = true}
+            //);
+
+            var q2 = _context.Messages
+                .Where(message => message.From == contact_user && message.To == current_user);
+                /*
+                .Select(message => new {
+                    id = message.Id,
+                    content = message.Content,
+                    created = message.Created,
+                sent = false
+                });*/
+            return await q1.Union(q2).ToListAsync();
+        }
+
+
+
         public async Task AddMessage(string from, string to, string content)
         {
             /*
@@ -29,10 +56,12 @@ namespace whenAppModel.Services
 
         public async Task AddMessage(Message message)
         {
+            /*
             _context.Messages.Add(message);
             message.Chat.Last = message.Data;
             message.Chat.LastDate = message.Date.ToString();
             await _context.SaveChangesAsync();
+            */
         }
 
         public async Task<List<Message>> GetMessages(string p1, string p2)
@@ -61,18 +90,7 @@ namespace whenAppModel.Services
             return true;
         }
 
-        public async Task<List<Message>?> GetMessages(User user)
-        {
-            /*
-            var messages = _context.Messages
-                .Where(message => (message.Chat.Person1 == user.Username || message.Chat.Person2 == user.Username))
-                .OrderByDescending(message => message.Date);
-
-            return await messages.ToListAsync();
-            */
-            return null;
-        }
-
+       
         public async Task<Message?> GetMessage(int Id)
         {
             var q = from message in _context.Messages
@@ -102,9 +120,6 @@ namespace whenAppModel.Services
             return Message;
         }
 
-        public async Task<List<Message>> GetAllMessages()
-        {
-            return await _context.Messages.ToListAsync();
-        }
+      
     }
 }

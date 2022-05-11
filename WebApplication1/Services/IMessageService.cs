@@ -11,9 +11,7 @@ namespace whenAppModel.Services
 
         public Task<bool> RemoveMessage(int id);
 
-        public Task<List<Message>> GetMessages(string p1, string p2);
-
-        public Task<List<Message>> GetMessages(User user);
+        public Task<ICollection<Message>?> GetMessages(string current_user, string contact_user);
 
         public Task<Message?> GetMessage(int Id);
 

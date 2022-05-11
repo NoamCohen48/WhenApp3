@@ -4,36 +4,30 @@ namespace whenAppModel.Models
 {
     public class Message
     {
-        public enum Types
-        {
-            Text,
-            Image,
-            Video,
-            Record
-        }
 
         [Key]
         public int Id { get; set; }
+        public string Content { get; set; }
 
-        public Contact Chat { get; set; }
-
-        public DateTime Date { get; set; }
+        public DateTime Created { get; set; }
         
-        public Types Type { get; set; }    
+        public string From { get; set; }
+        public string To { get; set; }
         
-        public string Data { get; set; }
+        
 
         public Message()
         {
         }
 
-        public Message(int id, Contact chat, DateTime date, Types type, string data)
+        public Message(int id, string content, DateTime created, string from, string to)
         {
             this.Id = id;
-            this.Chat = chat;
-            this.Date = date;
-            this.Type = type;
-            this.Data = data;
+            this.Content = content;
+            this.Created = created;
+            this.From = from;
+            this.To = to;
         }
+
     }
 }

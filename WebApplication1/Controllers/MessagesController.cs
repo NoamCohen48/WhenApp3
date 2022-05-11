@@ -10,25 +10,37 @@ namespace WhenUp.Controllers
     [Route("contacts/{id}/messages")]
     public class MessagesController : Controller
     {
-        /*
+        
         private readonly IMessageService MessagesService;
         private readonly IContactsService ContactsService;
+        private readonly IUsersService userService;
 
-        User current_user = new User("admin", "admin", "admin", "ss");
 
-        public MessagesController(IMessageService _service1, IContactsService _service2)
+
+        public MessagesController(IMessageService _service1, IContactsService _service2, IUsersService _service3 )
         {
             MessagesService = _service1;
             ContactsService = _service2;
+            userService = _service3;
         }
 
+        [HttpGet]
+        [NonAction]
+        public async Task<User> GetCurrentUser()
+        {
 
+            var user = HttpContext.User.FindFirst("UserId")?.Value;
+            return await userService.Get(user);
+        }
+
+        //action number 1
         [HttpGet]
         [ActionName("Index")]
         public async Task<List<Message>> GetMessagesByUser(string id)
         {
-            var user = await ContactsService.Get(id);
-            return (List<Message>)await MessagesService.GetMessages(user);
+            User user = await GetCurrentUser();
+            ICollection<Message> messages = await MessagesService.GetMessages(user.Username, id);
+
         }
 
         [HttpPost]
