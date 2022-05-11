@@ -22,7 +22,7 @@ namespace whenAppModel.Services
         {
             if (user != null)
             {
-                return _context.Contacts.Where(contact => contact.User == user).ToList();
+                return _context.Contacts.Where(contact => contact.User == user.Username).ToList();
             }
             return null;
         }
@@ -34,7 +34,7 @@ namespace whenAppModel.Services
         }
 
         //TO-DO: Function to add new contact
-        public async Task AddContact(User currentUser, string contactUserName, string contactNickName, string contactServer)
+        public async Task AddContact(string currentUser, string contactUserName, string contactNickName, string contactServer)
         {
             await _context.SaveChangesAsync();
         }

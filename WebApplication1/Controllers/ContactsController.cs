@@ -52,7 +52,7 @@ namespace WhenUp.Controllers
             User currentUser = await GetCurrentUser();
             if (currentUser != null)
             {
-                await contactService.AddContact(currentUser, id, name, server);
+                await contactService.AddContact(currentUser.Username, id, name, server);
             }
         }
         
