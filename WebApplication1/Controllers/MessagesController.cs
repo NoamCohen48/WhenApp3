@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using WhenUp;
 using whenAppModel.Models;
 using whenAppModel.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WhenUp.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("contacts/{id}/messages")]
     public class MessagesController : Controller
@@ -65,7 +67,7 @@ namespace WhenUp.Controllers
                 sent = false
             });
             var target3 = sentTrue.Concat(sentFalse);
-            return (IActionResult)target3;
+            return Ok(target3);
         }
         //action number 2
         [HttpPost]

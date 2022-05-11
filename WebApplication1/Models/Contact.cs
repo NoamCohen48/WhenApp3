@@ -46,7 +46,7 @@ namespace whenAppModel.Models
         public string LastDate { get; set; }
 
         [Required]
-        [JsonPropertyName("user")]
+        [JsonIgnore]
         public string User { get; set; }
     }
 }
