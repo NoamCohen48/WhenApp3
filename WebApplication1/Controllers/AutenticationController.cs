@@ -57,10 +57,8 @@ namespace WebApplication1.Controllers
                     Secure = true
                 });
                 return Ok(new JwtSecurityTokenHandler().WriteToken(token));
-
             }
             return BadRequest(new { message = "Username or password is incorrect" });
-
         }
 
     }
