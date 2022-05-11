@@ -62,6 +62,7 @@ namespace whenAppModel.Services
                 m.Created = DateTime.Now;
                 m.Content = content;
             }
+            await context.SaveChangesAsync();
         }
         //action number 5
         public async Task<bool> RemoveMessage(int id)

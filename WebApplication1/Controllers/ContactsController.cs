@@ -43,7 +43,7 @@ namespace WhenUp.Controllers
             return null;
         }
 
-        //POST: Contacts - action number 1
+        //POST: Contacts - action number 2
         [HttpPost]
         [ActionName("Index")]
         public async Task AddContact(string id, string name, string server)
@@ -59,7 +59,7 @@ namespace WhenUp.Controllers
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-        //GET: Contacts/id - action number 2
+        //GET: Contacts/id - action number 3
         [Route("{id}")]
         [HttpGet]
         [ActionName("Index")]
@@ -76,28 +76,16 @@ namespace WhenUp.Controllers
         }
 
 
-        //PUT: Contacts/id - action number 2
+        //PUT: Contacts/id - action number 4
         [HttpPut]
         [Route("{id}")]
         [ActionName("Index")]
-        public async Task<Contact?> UpdateContact(string id, string name, string server)
+        public async Task UpdateContact(string id, string name, string server)
         {
-            Contact oldContact = await contactService.GetContact(id);
-
-            if (oldContact != null)
-            {
-                if (name != null)
-                    oldContact.Name = name;
-
-                if (server != null)
-                    oldContact.Server = server;
-
-                return await contactService.UpdateContact(oldContact, oldContact.Id);
-            }
-            return null;
+            await contactService.UpdateContact(id,name,server);
         }
 
-        //POST: Contacts/id - action number 2
+        //POST: Contacts/id - action number 5
         [HttpDelete]
         [Route("{id}")]
         [ActionName("Index")]

@@ -64,14 +64,30 @@ namespace whenAppModel.Services
         }
 
         //TO-DO: Function that update contact.
-        public async Task<Contact?> UpdateContact(Contact NewUser, string OldUserUserName)
+        public async Task UpdateContact(string id, string name, string servere)
         {
-            return null;
+            using var context = _context;
+            var m = await context.Contacts.FindAsync(id);
+            if (m != null)
+            {
+                m.Name = name;
+                m.Server = servere;
+            }
+            await context.SaveChangesAsync();
         }
 
         //TO-DO: Function that delete contact.
         public async Task DeleteContact(string UserName)
         {
+            using var context = _context;
+            var m = await context.Contacts.FindAsync(UserName);
+
+            if (m != null)
+            {
+                context.Contacts.Remove(m);
+                await context.SaveChangesAsync();
+            }    
+           
         }
     }
 }
