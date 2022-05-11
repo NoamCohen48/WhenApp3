@@ -16,7 +16,7 @@ namespace whenAppModel.Models
             User = new User();
         }
 
-        public Contact(string id, string name, string server, string last, string lastdate, User user)
+        public Contact(string id, string name, string server, string last, string lastdate, string user)
         {
             Id=id;
             Name=name;
@@ -47,6 +47,6 @@ namespace whenAppModel.Models
 
         [Required]
         [JsonPropertyName("user")]
-        public User User { get; set; }
+        public string User { get; set; }
     }
 }
