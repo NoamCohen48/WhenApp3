@@ -16,13 +16,13 @@ namespace whenAppModel.Models
             User = string.Empty;
         }
 
-        public Contact(string id, string name, string server, string last, string lastdate, string user)
+        public Contact(string id, string name, string server, string user)
         {
             Id=id;
             Name=name;
             Server=server;
-            Last=last;
-            LastDate=lastdate;
+            Last= string.Empty;
+            LastDate= string.Empty;
             User=user;
         }
 
