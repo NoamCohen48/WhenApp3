@@ -28,7 +28,7 @@ namespace whenAppModel.Services
                 }
                 return null;
             }
-            
+
         }
 
         //Function that return the user in contact format(id, name, server, last, lastdate)
@@ -48,18 +48,18 @@ namespace whenAppModel.Services
         //TO-DO: Function to add new contact
         public async Task AddContact(string currentUser, string contactId, string contactName, string contactServer)
         {
-            using (var context = _context)
+            if (currentUser == null || contactName == null || contactServer == null || contactId == null)
             {
-                if (currentUser != null && contactName != null && contactServer != null && contactId != null)
-                {
-                    var isExists = context.Contacts.Where(contact => contact.Id == contactId).ToList();
-                    if (isExists.Count == 0)
-                    {
-                        Contact contact = new Contact(contactId, contactName, contactServer, currentUser);
-                        await context.Contacts.AddAsync(contact);
-                        await context.SaveChangesAsync();
-                    }
-                }
+                return;
+            }
+
+            using var context = _context;
+            var isExists = await context.Contacts.AnyAsync(contact => contact.Id == contactId);
+            if (!isExists)
+            {
+                Contact contact = new Contact(contactId, contactName, contactServer, currentUser);
+                await context.Contacts.AddAsync(contact);
+                await context.SaveChangesAsync();
             }
         }
 

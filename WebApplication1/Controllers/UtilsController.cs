@@ -28,7 +28,7 @@ namespace WhenUp.Controllers
         [HttpGet]
         public async Task<IActionResult> Invitations(string from, string to, string server)
         {
-            await contactService.AddContact(to, from, "defalut nick name", server);
+            await contactService.AddContact(to, from, from, server);
             return Ok();
         }
 
