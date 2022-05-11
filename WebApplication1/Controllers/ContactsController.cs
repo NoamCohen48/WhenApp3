@@ -52,7 +52,7 @@ namespace WhenUp.Controllers
             User currentUser = await GetCurrentUser();
             if (currentUser != null)
             {
-                await contactService.AddContact(currentUser, id, name, server);
+                await contactService.AddContact(currentUser.Username, id, name, server);
             }
         }
         
@@ -81,7 +81,7 @@ namespace WhenUp.Controllers
         [HttpPut]
         [Route("{id}")]
         [ActionName("Index")]
-        public async Task<Contact?> UpdateContact(string id, string name = null, string server = null)
+        public async Task<Contact?> UpdateContact(string id, string name, string server)
         {
             Contact oldContact = await contactService.GetContact(id);
 

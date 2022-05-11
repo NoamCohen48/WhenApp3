@@ -13,16 +13,16 @@ namespace whenAppModel.Models
             Server = string.Empty;
             Last = string.Empty;
             LastDate = string.Empty;
-            User = new User();
+            User = string.Empty;
         }
 
-        public Contact(string id, string name, string server, string last, string lastdate, User user)
+        public Contact(string id, string name, string server, string user)
         {
             Id=id;
             Name=name;
             Server=server;
-            Last=last;
-            LastDate=lastdate;
+            Last= string.Empty;
+            LastDate= string.Empty;
             User=user;
         }
 
@@ -47,6 +47,6 @@ namespace whenAppModel.Models
 
         [Required]
         [JsonPropertyName("user")]
-        public User User { get; set; }
+        public string User { get; set; }
     }
 }

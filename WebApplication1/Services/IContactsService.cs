@@ -6,7 +6,7 @@ namespace whenAppModel.Services
     {
 
 
-		public Task AddContact(User currentUser, string contactUserName, string contactNickName, string contactServer);
+		public Task AddContact(string currentUser, string contactUserName, string contactNickName, string contactServer);
 
 		public Task<Contact?> GetContact(string id);
 
