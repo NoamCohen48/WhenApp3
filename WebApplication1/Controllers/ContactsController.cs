@@ -25,7 +25,6 @@ namespace WhenUp.Controllers
         [NonAction]
         public async Task<User> GetCurrentUser()
         {
-
             var user = HttpContext.User.FindFirst("UserId")?.Value;
             return await userService.Get(user);
         }

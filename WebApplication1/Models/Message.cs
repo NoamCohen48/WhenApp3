@@ -20,6 +20,14 @@ namespace whenAppModel.Models
         {
         }
 
+        public Message(string from, string to, string content)
+        {
+            this.Content = content;
+            this.Created = DateTime.Now;
+            this.From = from;
+            this.To = to;
+        }
+
         public Message(int id, string content, DateTime created, string from, string to)
         {
             this.Id = id;

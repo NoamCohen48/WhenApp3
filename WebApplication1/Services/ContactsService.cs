@@ -20,35 +20,45 @@ namespace whenAppModel.Services
         //Function that return all the user contacts.
         public async Task<ICollection<Contact>?> GetAllContacts(User user)
         {
-            if (user != null)
+            using (var context = _context)
             {
-                return _context.Contacts.Where(contact => contact.User == user.Username).ToList();
+                if (user != null)
+                {
+                    return context.Contacts.Where(contact => contact.User == user.Username).ToList();
+                }
+                return null;
             }
-            return null;
+            
         }
 
         //Function that return the user in contact format(id, name, server, last, lastdate)
         public async Task<Contact?> GetContact(string id)
         {
-            if (id != null)
+            using (var context = _context)
             {
-                var contacts = _context.Contacts.Where(contact => contact.Id == id).ToList();
-                return contacts.FirstOrDefault();
+                if (id != null)
+                {
+                    var contacts = context.Contacts.Where(contact => contact.Id == id).ToList();
+                    return contacts.FirstOrDefault();
+                }
+                return null;
             }
-            return null;
         }
 
         //TO-DO: Function to add new contact
         public async Task AddContact(string currentUser, string contactId, string contactName, string contactServer)
         {
-            if (currentUser != null && contactName != null && contactServer != null && contactId != null)
+            using (var context = _context)
             {
-                var isExists = _context.Contacts.Where(contact => contact.Id == contactId).ToList();
-                if (isExists.Count == 0)
+                if (currentUser != null && contactName != null && contactServer != null && contactId != null)
                 {
-                    Contact contact = new Contact(contactId, contactName, contactServer, currentUser);
-                    await _context.Contacts.AddAsync(contact);
-                    await _context.SaveChangesAsync();
+                    var isExists = context.Contacts.Where(contact => contact.Id == contactId).ToList();
+                    if (isExists.Count == 0)
+                    {
+                        Contact contact = new Contact(contactId, contactName, contactServer, currentUser);
+                        await context.Contacts.AddAsync(contact);
+                        await context.SaveChangesAsync();
+                    }
                 }
             }
         }
@@ -63,9 +73,5 @@ namespace whenAppModel.Services
         public async Task DeleteContact(string UserName)
         {
         }
-
-        
-
-
     }
 }
