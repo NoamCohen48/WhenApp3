@@ -7,7 +7,7 @@ using WhenUp;
 
 #nullable disable
 
-namespace WhenApp.Migrations
+namespace WhenAppApi.Migrations
 {
     [DbContext(typeof(WhenAppContext))]
     partial class WhenAppContextModelSnapshot : ModelSnapshot

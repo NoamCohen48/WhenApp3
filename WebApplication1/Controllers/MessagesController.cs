@@ -63,9 +63,9 @@ namespace WhenUp.Controllers
         [HttpGet]
         [Route("{id2}")]
         [ActionName("Index")]
-        public async Task<Message?> GetMessageById(int id)
+        public async Task<IActionResult?> GetMessageById(int id)
         {
-            return await MessagesService.GetMessage(id);
+            return Ok(await MessagesService.GetMessage(id));
         }
 
         [HttpPut]

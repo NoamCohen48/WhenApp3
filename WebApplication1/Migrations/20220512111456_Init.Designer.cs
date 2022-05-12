@@ -8,11 +8,11 @@ using WhenUp;
 
 #nullable disable
 
-namespace WhenApp.Migrations
+namespace WhenAppApi.Migrations
 {
     [DbContext(typeof(WhenAppContext))]
-    [Migration("20220511202635_init")]
-    partial class init
+    [Migration("20220512111456_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

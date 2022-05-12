@@ -67,16 +67,16 @@ namespace WhenUp.Controllers
         [Route("{id}")]
         [HttpGet]
         [ActionName("Index")]
-        public async Task<Contact?> GetDetails(string id)
+        public async Task<IActionResult> GetDetails(string id)
         {
             if (id == null)
             {
-                return null;
+                return BadRequest();
             }
+            User currentUser = await GetCurrentUser();
+            Contact contact = await contactService.GetContact(currentUser.Username,id);
 
-            Contact contact = await contactService.GetContact(id);
-
-            return contact;
+            return Ok(contact);
         }
 
 
@@ -86,12 +86,13 @@ namespace WhenUp.Controllers
         [ActionName("Index")]
         public async Task<IActionResult> UpdateContact(string id, string name, string server)
         {
-            Contact contact = await contactService.GetContact(id);
+            User currentUser = await GetCurrentUser();
+            Contact contact = await contactService.GetContact(currentUser.Username, id);
 
             if (contact == null)
                 return NotFound();
 
-            await contactService.UpdateContact(id, name, server);
+            await contactService.UpdateContact(currentUser.Username,id, name, server);
 
             return Ok();
         }
@@ -102,7 +103,9 @@ namespace WhenUp.Controllers
         [ActionName("Index")]
         public async Task<IActionResult> DeleteContact(string id)
         {
-            await contactService.DeleteContact(id);
+            User currentUser = await GetCurrentUser();
+
+            await contactService.DeleteContact(currentUser.Username,id);
             return Ok();
         }
     }
