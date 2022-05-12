@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using WebApplication1.Services;
 using whenAppModel.Services;
 using WhenUp;
 
@@ -17,6 +18,8 @@ builder.Services.AddTransient<WhenAppContext>();
 builder.Services.AddScoped<IContactsService, ContactsService>();
 builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
+builder.Services.AddScoped<IAuthenticationService, JWTService>();
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
