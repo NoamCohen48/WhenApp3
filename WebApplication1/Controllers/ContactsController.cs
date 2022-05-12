@@ -23,9 +23,9 @@ namespace WhenUp.Controllers
 
         public class ContactsPayload
         {
-            public string? id;
-            public string? name;
-            public string? server;
+            public string? id { get; set; }
+            public string? name { get; set; }
+            public string? server { get; set; }
         }
 
         [HttpGet]
@@ -46,7 +46,8 @@ namespace WhenUp.Controllers
             User currentUser = await GetCurrentUser();
             if (currentUser != null)
             {
-                return Ok(await contactService.GetAllContacts(currentUser));
+                var r = await contactService.GetAllContacts(currentUser);
+                return Ok(r);
             }
             return NotFound();
         }

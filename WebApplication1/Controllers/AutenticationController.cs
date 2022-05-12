@@ -12,7 +12,7 @@ namespace WebApplication1.Controllers
     [Route("api")]
     public class AutenticationController : Controller
     {
-        public IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
         private readonly IUsersService service;
 
         public AutenticationController(IConfiguration config, IUsersService _service)
@@ -23,8 +23,8 @@ namespace WebApplication1.Controllers
 
         public class AutenticationPayload
         {
-            public string? username;
-            public string? password;
+            public string? username { get; set; }
+            public string? password { get; set; }
         }
 
         //login
@@ -64,8 +64,9 @@ namespace WebApplication1.Controllers
                     Secure = true
                 });
                 return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+                //return Ok(await service.Get(username));
             }
-            return Ok(new { message = "Username or password is incorrect" });
+            return BadRequest(new { message = "Username or password is incorrect" });
         }
 
     }

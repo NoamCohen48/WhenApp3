@@ -9,7 +9,7 @@ namespace WhenUp.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("contacts/{id}/messages")]
+    [Route("api/contacts/{id}/messages")]
     public class MessagesController : Controller
     {
 
@@ -22,6 +22,11 @@ namespace WhenUp.Controllers
             MessagesService = _service1;
             ContactsService = _service2;
             userService = _service3;
+        }
+
+        public class MessagesPayload
+        {
+            public string? content { get; set; }
         }
 
         [HttpGet]
@@ -46,17 +51,17 @@ namespace WhenUp.Controllers
                 content = message.Content,
                 created = message.Created,
                 sent = message.From == id
-            }).ToList();
+            }).OrderBy(m => m.created).ToList();
             return Ok(r);
         }
 
         //action number 2
         [HttpPost]
         [ActionName("Index")]
-        public async Task SendMessageToUser(string id, [FromBody]string content)
+        public async Task SendMessageToUser(string id, [FromBody] MessagesPayload payload)
         {
             var user = await GetCurrentUser();
-            await MessagesService.AddMessage(user.Username, id, content);
+            await MessagesService.AddMessage(user.Username, id, payload.content);
         }
 
         //action number 3
@@ -72,9 +77,9 @@ namespace WhenUp.Controllers
         [Route("{id2}")]
         [ActionName("Index")]
         //action number 4
-        public async Task UpdateMessage(int id, [FromBody]string contect)
+        public async Task UpdateMessage(int id, [FromBody] MessagesPayload payload)
         {
-            await MessagesService.UpdateMessage(id, contect);
+            await MessagesService.UpdateMessage(id, payload.content);
         }
 
         [HttpDelete]
