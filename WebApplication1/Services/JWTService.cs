@@ -20,8 +20,11 @@ namespace WebApplication1.Services
             _configuration = config;
         }
 
-        public async Task<string> AssignToken(string username)
+        public string CreateToken(string username)
         {
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWTParams:SecretKey"]));
+            var mac = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, username),
@@ -29,9 +32,6 @@ namespace WebApplication1.Services
                 new Claim(JwtRegisteredClaimNames.Iat, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
                 new Claim("UserId", username)
             };
-
-            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWTParams:SecretKey"]));
-            var mac = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 _configuration["JWTParams:Issuer"],
@@ -42,6 +42,16 @@ namespace WebApplication1.Services
                 );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public string ValidateToken()
+        {
+            return string.Empty;
+        }
+
+        public string GetUsernameFromToken()
+        {
+            return string.Empty;
         }
     }
 }

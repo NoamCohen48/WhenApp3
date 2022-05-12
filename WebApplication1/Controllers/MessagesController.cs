@@ -53,7 +53,7 @@ namespace WhenUp.Controllers
         //action number 2
         [HttpPost]
         [ActionName("Index")]
-        public async Task SendMessageToUser(string id, string content)
+        public async Task SendMessageToUser(string id, [FromBody] string content)
         {
             var user = await GetCurrentUser();
             await MessagesService.AddMessage(user.Username, id, content);

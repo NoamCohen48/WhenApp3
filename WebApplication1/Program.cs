@@ -7,8 +7,8 @@ using WhenUp;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -16,9 +16,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<WhenAppContext>();
 builder.Services.AddScoped<IContactsService, ContactsService>();
 builder.Services.AddScoped<IUsersService, UsersService>();
-
 builder.Services.AddScoped<IMessageService, MessageService>();
-builder.Services.AddScoped<IUsersService, UsersService>();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.RequireHttpsMetadata = false;
@@ -42,13 +41,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Allow All",
         builder =>
         {
-            builder.SetIsOriginAllowed(origin => true).AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+            builder.SetIsOriginAllowed(origin => true).AllowAnyMethod().AllowAnyHeader().AllowCredentials();
         });
 });
 
