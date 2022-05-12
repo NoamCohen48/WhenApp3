@@ -68,25 +68,32 @@ namespace whenAppModel.Services
         }
 
         //action number 4
-        public async Task Update(int id, string content)
+        public async Task<bool> UpdateMessage(int id, string content)
         {
             using var context = _context;
+
             var m = await context.Messages.FindAsync(id);
-            if (m != null)
+            if (m == null)
             {
-                m.Created = DateTime.Now;
-                m.Content = content;
+                return false;
             }
+
+            m.Content = content;
             await context.SaveChangesAsync();
+
+            return true;
         }
         //action number 5
         public async Task<bool> RemoveMessage(int id)
         {
             using var context = _context;
+
             var m = await context.Messages.FindAsync(id);
 
             if (m == null)
+            {
                 return false;
+            }
 
             context.Messages.Remove(m);
             await context.SaveChangesAsync();
