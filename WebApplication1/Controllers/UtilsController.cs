@@ -4,43 +4,38 @@ using whenAppModel.Services;
 
 namespace WhenUp.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api")]
     public class UtilsController : Controller
     {
         
-        private readonly IMessageService MessagesService;
+        private readonly IMessageService _messagesService;
+        private readonly IContactsService _contactService;
+        private readonly IUsersService _userService;
 
-        private readonly IContactsService contactService;
-        private readonly IUsersService userService;
-
-        public UtilsController(IContactsService ContactService, IUsersService UserService, IMessageService _service1)
+        public UtilsController(IContactsService ContactService, IUsersService UserService, IMessageService MessageService)
         {
-            contactService = ContactService;
-            userService = UserService;
-            MessagesService = _service1;
+            _contactService = ContactService;
+            _userService = UserService;
+            _messagesService = MessageService;
         }
 
-        
-        [Route("invitations")]
-        //[ActionName("Index")]
         [HttpGet]
+        [Route("invitations")]
         public async Task<IActionResult> Invitations(string from, string to, string server)
         {
-            await contactService.AddContact(to, from, from, server);
+            await _contactService.AddContact(to, from, from, server);
             return Ok();
         }
 
-        
         [HttpGet]
         [Route("transfer")]
         public async Task<IActionResult> Transfer(string from, string to, string content)
         {
             // if from is in my server
-            if(await userService.Get(from) != null)
+            if(await _userService.Get(from) != null)
             {
-                await MessagesService.AddMessage(from, to, content);
+                await _messagesService.AddMessage(from, to, content);
             }
             return Ok();
         }

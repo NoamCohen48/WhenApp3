@@ -15,7 +15,7 @@ namespace WhenUp.Controllers
         private readonly IContactsService contactService;
         private readonly IUsersService userService;
 
-        public ContactsController(IContactsService ContactService, IUsersService UserService )
+        public ContactsController(IContactsService ContactService, IUsersService UserService)
         {
             contactService = ContactService;
             userService = UserService;
@@ -43,7 +43,7 @@ namespace WhenUp.Controllers
             return null;
         }
 
-        //POST: Contacts - action number 2
+        //POST: Contacts - action number 1
         [HttpPost]
         [ActionName("Index")]
         public async Task AddContact(string id, string name, string server)
@@ -54,12 +54,12 @@ namespace WhenUp.Controllers
                 await contactService.AddContact(currentUser.Username, id, name, server);
             }
         }
-        
+
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-        //GET: Contacts/id - action number 3
+        //GET: Contacts/id - action number 2
         [Route("{id}")]
         [HttpGet]
         [ActionName("Index")]
@@ -76,22 +76,30 @@ namespace WhenUp.Controllers
         }
 
 
-        //PUT: Contacts/id - action number 4
+        //PUT: Contacts/id - action number 2
         [HttpPut]
         [Route("{id}")]
         [ActionName("Index")]
-        public async Task UpdateContact(string id, string name, string server)
+        public async Task<IActionResult> UpdateContact(string id, string name, string server)
         {
-            await contactService.UpdateContact(id,name,server);
+            Contact contact = await contactService.GetContact(id);
+
+            if (contact == null)
+                return NotFound();
+
+            await contactService.UpdateContact(id, name, server);
+
+            return Ok();
         }
 
-        //POST: Contacts/id - action number 5
+        //POST: Contacts/id - action number 2
         [HttpDelete]
         [Route("{id}")]
         [ActionName("Index")]
-        public async Task DeleteContact(string id)
+        public async Task<IActionResult> DeleteContact(string id)
         {
             await contactService.DeleteContact(id);
+            return Ok();
         }
     }
 }

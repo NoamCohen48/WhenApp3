@@ -8,45 +8,44 @@ namespace whenAppModel.Models
     {
         public Contact()
         {
-            Id = string.Empty;
-            Name = string.Empty;
+            ContactUsername = string.Empty;
+            ContactNickname = string.Empty;
             Server = string.Empty;
-            Last = string.Empty;
-            LastDate = string.Empty;
-            User = string.Empty;
+            LastMessage = string.Empty;
+            LastMessageDate = string.Empty;
+            ContactOfUsername = string.Empty;
         }
 
         public Contact(string id, string name, string server, string user)
         {
-            Id=id;
-            Name=name;
+            ContactUsername=id;
+            ContactNickname=name;
             Server=server;
-            Last= string.Empty;
-            LastDate= string.Empty;
-            User=user;
+            LastMessage= string.Empty;
+            LastMessageDate= string.Empty;
+            ContactOfUsername=user;
         }
 
-        [Required]
         [Key]
         [JsonPropertyName("id")]
-        public string Id { get; set; }
+        public string ContactUsername { get; set; }
 
         [Required]
         [JsonPropertyName("name")]
-        public string Name { get; set; }
+        public string ContactNickname { get; set; }
 
         [Required]
         [JsonPropertyName("server")]
         public string Server { get; set; }
 
         [JsonPropertyName("last")]
-        public string Last { get; set; }
+        public string LastMessage { get; set; }
 
         [JsonPropertyName("lastdate")]
-        public string LastDate { get; set; }
+        public string LastMessageDate { get; set; }
 
-        [Required]
-        [JsonIgnore]
-        public string User { get; set; }
+        [Key]
+        //[JsonIgnore]
+        public string ContactOfUsername { get; set; }
     }
 }

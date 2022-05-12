@@ -7,7 +7,7 @@ using WhenUp;
 
 #nullable disable
 
-namespace WebApplication1.Migrations
+namespace WhenApp.Migrations
 {
     [DbContext(typeof(WhenAppContext))]
     partial class WhenAppContextModelSnapshot : ModelSnapshot
@@ -21,18 +21,21 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("whenAppModel.Models.Contact", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("ContactUsername")
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("Last")
+                    b.Property<string>("ContactOfUsername")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("ContactNickname")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("LastDate")
+                    b.Property<string>("LastMessage")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("LastMessageDate")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -40,11 +43,7 @@ namespace WebApplication1.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("User")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
+                    b.HasKey("ContactUsername", "ContactOfUsername");
 
                     b.ToTable("Contacts");
                 });

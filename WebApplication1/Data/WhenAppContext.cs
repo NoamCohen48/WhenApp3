@@ -19,10 +19,10 @@ namespace WhenUp
         {
             // Configuring the Name property as the primary
             // key of the Items table
-            modelBuilder.Entity<User>().HasKey(e => e.Username);
-            modelBuilder.Entity<Message>().HasKey(e => e.Id);
-            modelBuilder.Entity<Rating>().HasKey(e => e.Id);
-            modelBuilder.Entity<Contact>().HasKey(e => e.Id);
+            //modelBuilder.Entity<User>().HasKey(e => e.Username);
+            //modelBuilder.Entity<Message>().HasKey(e => e.Id);
+            //modelBuilder.Entity<Rating>().HasKey(e => e.Id);
+            modelBuilder.Entity<Contact>().HasKey(e => new { e.ContactUsername, e.ContactOfUsername });
 
             base.OnModelCreating(modelBuilder);
         }
