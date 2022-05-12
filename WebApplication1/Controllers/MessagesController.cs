@@ -39,7 +39,7 @@ namespace WhenUp.Controllers
         public async Task<IActionResult> GetMessagesByUser(string id)
         {
             User user = await GetCurrentUser();
-            var messages = await MessagesService.GetMessages(user.Username, id);
+            var messages = await MessagesService.GetMessagesBetween(user.Username, id);
             var r = messages.Select(message => new
             {
                 id = message.Id,

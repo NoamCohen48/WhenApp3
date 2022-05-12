@@ -14,9 +14,12 @@ namespace whenAppModel.Services
         }
 
         //Get user by his username - action number 3.
-        public async Task<User?> Get(string Username)
+        public async Task<User?> Get(string username)
         {
+            using var context = _context;
+            var user = await context.Users.FindAsync(username);
 
+            /*
             var q = from user in _context.Users
                     where user.Username == Username
                     select user;
@@ -25,31 +28,55 @@ namespace whenAppModel.Services
             {
                 return null;
             }
+            */
 
-            return q.First();
-        }
-        public async Task<User?> Add(User user)
-        {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
             return user;
         }
-        //delete user - action number 5.
-        public async Task Delete(string UserName)
+
+
+        public async Task<User?> Add(string username, string password)
         {
-            //var user = await Get(UserName);
-            //_context.Users.Remove(user);
-            //await _context.SaveChangesAsync();
+            using var context = _context;
+
+            var user = new User(username, password);
+
+            context.Users.Add(user);
+            await context.SaveChangesAsync();
+
+            return user;
         }
 
-        public async Task<bool> Validation(string Username, string Password)
+        public async Task<User?> Add(User user)
         {
-            var user = await Get(Username);
-            if (user != null && user.Password == Password)
+            using var context = _context;
+
+            context.Users.Add(user);
+            await context.SaveChangesAsync();
+
+            return user;
+        }
+
+        //delete user - action number 5.
+        public async Task<User?> Delete(string username)
+        {
+            using var context = _context;
+
+            var user = await Get(username);
+
+            if (user != null)
             {
-            return true;
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
             }
-            return false;
+
+            return user;
+        }
+
+        public async Task<bool> Validation(string username, string password)
+        {
+            var user = await Get(username);
+
+            return user != null && user.Password == password;
         }
 
     }

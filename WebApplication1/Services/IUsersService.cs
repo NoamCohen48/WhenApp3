@@ -1,16 +1,18 @@
 ﻿using whenAppModel.Models;
 
 namespace whenAppModel.Services
-	{
-	public interface IUsersService
+{
+    public interface IUsersService
     {
 
-		public Task<User?> Get(string Username);
+        public Task<User?> Get(string username);
 
-		public Task Delete(string UserName);
+        public Task<User?> Add(string username, string password);
 
-		public Task<User?> Add(User user);
-		public Task<bool> Validation(string Username, string Password);
+        public Task<User?> Add(User user);
 
-	}
+        public Task<bool> Validation(string username, string password);
+
+        public Task<User?> Delete(string username);
+    }
 }

@@ -1,20 +1,19 @@
 ﻿using whenAppModel.Models;
 
 namespace whenAppModel.Services
-	{
-	public interface IContactsService
+{
+    public interface IContactsService
     {
+        public Task<ICollection<Contact>?> GetAllContacts(string username);
+        public Task<ICollection<Contact>?> GetAllContacts(User user);
 
+        public Task<Contact?> GetContact(string contactOf, string contactUsername);
 
-		public Task AddContact(string currentUser, string contactUserName, string contactNickName, string contactServer);
+        public Task<bool> AddContact(string currentUser, string contactUserName, string contactNickName, string contactServer);
 
-		public Task<Contact?> GetContact(string id);
+        public Task<bool> UpdateContact(string contactOf, string contactUsername, string newNick, string newServer);
 
-		public Task<ICollection<Contact>?> GetAllContacts(User user);
+        public Task<bool> DeleteContact(string contactOf, string contactUsername);
 
-		public Task UpdateContact(string id, string name, string server);
-
-		public Task DeleteContact(string UserName);
-
-	}
+    }
 }

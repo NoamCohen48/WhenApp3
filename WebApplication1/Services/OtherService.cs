@@ -11,6 +11,7 @@ namespace WebApplication1.Services
         {
             _context = context;
         }
+
         //register
         public async Task<User?> Add(User user)
         {
