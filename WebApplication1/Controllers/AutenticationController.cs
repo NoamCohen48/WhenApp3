@@ -12,10 +12,8 @@ namespace WebApplication1.Controllers
     [Route("api/[controller]")]
     public class AutenticationController : Controller
     {
-
         public IConfiguration _configuration;
         private readonly IUsersService service;
-
 
         public AutenticationController(IConfiguration config, IUsersService _service)
         {
