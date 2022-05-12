@@ -29,7 +29,7 @@ namespace WebApplication1.Controllers
 
         //login
         [HttpPost]
-        [Route("login")]
+        [Route("Login")]
         public async Task<IActionResult> SaveToken([FromBody] AutenticationPayload payload)
         {
             string username = payload.username;
@@ -69,6 +69,27 @@ namespace WebApplication1.Controllers
             return BadRequest(new { message = "Username or password is incorrect" });
         }
 
+        //Register
+        [HttpPost]
+        [Route("Register")]
+        public async Task<IActionResult> Register([FromBody] AutenticationPayload payload)
+        {
+            string username = payload.username;
+            string password = payload.password;
+
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            {
+                return BadRequest(new { message = "Username or password are missing" });
+            }
+
+            if (await service.Get(username) != null)
+            {
+                return BadRequest(new { message = "User already exists" });
+            }
+
+            await service.Add(username, password);
+            return Ok(await service.Get(username));
+        }
     }
 
 }
