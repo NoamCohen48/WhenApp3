@@ -33,17 +33,17 @@ namespace WhenUp.Controllers
         // GET: Contacts - action number 1
         [HttpGet]
         [ActionName("Index")]
-        public async Task<ICollection<Contact>> GetAllContacts()
+        public async Task<IActionResult> GetAllContacts()
         {
             User currentUser = await GetCurrentUser();
             if (currentUser != null)
             {
-                return await contactService.GetAllContacts(currentUser);
+                return Ok(await contactService.GetAllContacts(currentUser));
             }
-            return null;
+            return NotFound();
         }
 
-        //POST: Contacts - action number 1
+        //POST: Contacts - action number 2
         [HttpPost]
         [ActionName("Index")]
         public async Task AddContact(string id, string name, string server)
@@ -53,13 +53,17 @@ namespace WhenUp.Controllers
             {
                 await contactService.AddContact(currentUser.Username, id, name, server);
             }
+            else
+            {
+                NotFound();
+            }
         }
 
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-        //GET: Contacts/id - action number 2
+        //GET: Contacts/id - action number 3
         [Route("{id}")]
         [HttpGet]
         [ActionName("Index")]
