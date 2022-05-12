@@ -1,5 +1,4 @@
-﻿#nullable disable
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using WhenUp;
 using whenAppModel.Models;
 using whenAppModel.Services;
@@ -12,6 +11,7 @@ namespace WhenUp.Controllers
     [Route("api/[controller]")]
     public class ContactsController : ControllerBase
     {
+        
         private readonly IContactsService contactService;
         private readonly IUsersService userService;
 
@@ -21,11 +21,19 @@ namespace WhenUp.Controllers
             userService = UserService;
         }
 
+        public class ContactsPayload
+        {
+            public string? id;
+            public string? name;
+            public string? server;
+        }
+
         [HttpGet]
         [NonAction]
         public async Task<User> GetCurrentUser()
         {
             var user = HttpContext.User.FindFirst("UserId")?.Value;
+            //Request.Headers
             return await userService.Get(user);
         }
 
@@ -43,15 +51,17 @@ namespace WhenUp.Controllers
             return NotFound();
         }
 
+
+        
         //POST: Contacts - action number 2
         [HttpPost]
         [ActionName("Index")]
-        public async Task AddContact(string id, string name, string server)
+        public async Task AddContact([FromBody] ContactsPayload payload)
         {
             User currentUser = await GetCurrentUser();
             if (currentUser != null)
             {
-                await contactService.AddContact(currentUser.Username, id, name, server);
+                await contactService.AddContact(currentUser.Username, payload.id, payload.name, payload.server);
             }
             else
             {
@@ -59,10 +69,9 @@ namespace WhenUp.Controllers
             }
         }
 
-
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
+        
         //GET: Contacts/id - action number 3
         [Route("{id}")]
         [HttpGet]
@@ -78,13 +87,13 @@ namespace WhenUp.Controllers
 
             return Ok(contact);
         }
-
+        
 
         //PUT: Contacts/id - action number 2
         [HttpPut]
         [Route("{id}")]
         [ActionName("Index")]
-        public async Task<IActionResult> UpdateContact(string id, string name, string server)
+        public async Task<IActionResult> UpdateContact(string id, [FromBody] ContactsPayload payload)
         {
             User currentUser = await GetCurrentUser();
             Contact contact = await contactService.GetContact(currentUser.Username, id);
@@ -92,7 +101,7 @@ namespace WhenUp.Controllers
             if (contact == null)
                 return NotFound();
 
-            await contactService.UpdateContact(currentUser.Username,id, name, server);
+            await contactService.UpdateContact(currentUser.Username,id, payload.name, payload.server);
 
             return Ok();
         }

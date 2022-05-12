@@ -9,7 +9,7 @@ namespace WebApplication1.Controllers
 {
 
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api")]
     public class AutenticationController : Controller
     {
         public IConfiguration _configuration;
@@ -21,10 +21,19 @@ namespace WebApplication1.Controllers
             _configuration = config;
         }
 
+        public class AutenticationPayload
+        {
+            public string? username;
+            public string? password;
+        }
+
         //login
         [HttpPost]
-        public async Task<IActionResult> SaveToken(string username, string password)
+        [Route("login")]
+        public async Task<IActionResult> SaveToken([FromBody] AutenticationPayload payload)
         {
+            string username = payload.username;
+            string password = payload.password;
 
             if (await service.Validation(username, password))
             {
@@ -56,7 +65,7 @@ namespace WebApplication1.Controllers
                 });
                 return Ok(new JwtSecurityTokenHandler().WriteToken(token));
             }
-            return BadRequest(new { message = "Username or password is incorrect" });
+            return Ok(new { message = "Username or password is incorrect" });
         }
 
     }
