@@ -74,7 +74,7 @@ namespace WhenUp.Controllers
         //action number 4
         public async Task UpdateMessage(int id, string contect)
         {
-            await MessagesService.Update(id, contect);
+            await MessagesService.UpdateMessage(id, contect);
         }
 
         [HttpDelete]
