@@ -20,20 +20,34 @@ namespace WhenUp.Controllers
             _messagesService = MessageService;
         }
 
+        public class UtilsPayload
+        {
+            public string? from;
+            public string? to;
+            public string? content;
+            public string? server;
+        }
+
         [HttpGet]
         [Route("invitations")]
-        public async Task<IActionResult> Invitations(string from, string to, string server)
+        public async Task<IActionResult> Invitations([FromBody] UtilsPayload payload)
         {
+            string? from = payload.from;
+            string? to = payload.to;
+            string? server = payload.server;
             await _contactService.AddContact(to, from, from, server);
             return Ok();
         }
 
         [HttpGet]
         [Route("transfer")]
-        public async Task<IActionResult> Transfer(string from, string to, string content)
+        public async Task<IActionResult> Transfer([FromBody] Payload payload)
         {
+            string? from = payload.from;
+            string? to = payload.to;
+            string? content = payload.content;
             // if from is in my server
-            if(await _userService.Get(from) != null)
+            if (await _userService.Get(from) != null)
             {
                 await _messagesService.AddMessage(from, to, content);
             }

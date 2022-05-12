@@ -53,7 +53,7 @@ namespace WhenUp.Controllers
         //action number 2
         [HttpPost]
         [ActionName("Index")]
-        public async Task SendMessageToUser(string id, string content)
+        public async Task SendMessageToUser(string id, [FromBody]string content)
         {
             var user = await GetCurrentUser();
             await MessagesService.AddMessage(user.Username, id, content);
@@ -72,7 +72,7 @@ namespace WhenUp.Controllers
         [Route("{id2}")]
         [ActionName("Index")]
         //action number 4
-        public async Task UpdateMessage(int id, string contect)
+        public async Task UpdateMessage(int id, [FromBody]string contect)
         {
             await MessagesService.UpdateMessage(id, contect);
         }
