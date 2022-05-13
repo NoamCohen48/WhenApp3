@@ -8,50 +8,34 @@ namespace whenAppModel.Services
     {
         private readonly WhenAppContext _context;
 
-        public UsersService(WhenAppContext context)
+        public UsersService(WhenAppContext Context)
         {
-            _context = context;
+            _context = Context;
         }
 
         //Get user by his username - action number 3.
         public async Task<User?> Get(string username)
         {
-            using var context = _context;
-            var user = await context.Users.FindAsync(username);
-
-            /*
-            var q = from user in _context.Users
-                    where user.Username == Username
-                    select user;
-
-            if (q.Count() == 0)
-            {
-                return null;
-            }
-            */
-
+            var user = await _context.Users.FindAsync(username);
             return user;
         }
 
 
         public async Task<User?> Add(string username, string password)
         {
-            using var context = _context;
 
             var user = new User(username, password);
 
-            context.Users.Add(user);
-            await context.SaveChangesAsync();
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
 
             return user;
         }
 
         public async Task<User?> Add(User user)
         {
-            using var context = _context;
-
-            context.Users.Add(user);
-            await context.SaveChangesAsync();
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
 
             return user;
         }
@@ -59,8 +43,6 @@ namespace whenAppModel.Services
         //delete user - action number 5.
         public async Task<User?> Delete(string username)
         {
-            using var context = _context;
-
             var user = await Get(username);
 
             if (user != null)
