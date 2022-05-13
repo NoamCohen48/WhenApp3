@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using WhenUp;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using whenAppModel.Models;
 using whenAppModel.Services;
-using Microsoft.AspNetCore.Authorization;
 
 namespace WhenUp.Controllers
 {
@@ -30,7 +29,7 @@ namespace WhenUp.Controllers
 
         [HttpGet]
         [NonAction]
-        public async Task<User> GetCurrentUser()
+        public async Task<User?> GetCurrentUser()
         {
             var user = HttpContext.User.FindFirst("UserId")?.Value;
             //Request.Headers
@@ -43,13 +42,13 @@ namespace WhenUp.Controllers
         [ActionName("Index")]
         public async Task<IActionResult> GetAllContacts()
         {
-            User currentUser = await GetCurrentUser();
+            User? currentUser = await GetCurrentUser();
             if (currentUser != null)
             {
                 var r = await contactService.GetAllContacts(currentUser);
                 return Ok(r);
             }
-            return NotFound();
+            return NotFound("token is incorrect");
         }
 
 

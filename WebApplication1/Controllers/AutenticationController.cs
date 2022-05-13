@@ -14,9 +14,9 @@ namespace WebApplication1.Controllers
     {
         private readonly IConfiguration configuration;
         private readonly IUsersService userService;
-        JWTService JWTService;
+        IAuthenticationService JWTService;
 
-        public AutenticationController(IConfiguration _config, IUsersService _service, JWTService _JWTService)
+        public AutenticationController(IConfiguration _config, IUsersService _service, IAuthenticationService _JWTService)
         {
             userService = _service;
             configuration = _config;
@@ -34,17 +34,23 @@ namespace WebApplication1.Controllers
         [Route("Login")]
         public async Task<IActionResult> Login([FromBody] AutenticationPayload payload)
         {
-            string username = payload.username;
-            string password = payload.password;
 
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(payload.username) || string.IsNullOrEmpty(payload.password))
             {
                 return BadRequest(new { message = "Username or password are missing" });
             }
 
-            if (await userService.Validation(username, password))
+            if (await userService.Validation(payload.username, payload.password))
             {
-                var token = JWTService.CreateToken(username);
+                var token = JWTService.CreateToken(payload.username);
+
+                Response.Cookies.Append("token", token, new CookieOptions
+                {
+                    HttpOnly = true,
+                    SameSite = SameSiteMode.None,
+                    Secure = true
+                });
+
                 return Ok(token);
                 //return Ok(await service.Get(username));
             }
