@@ -18,9 +18,7 @@ namespace whenAppModel.Services
         //Function that return all the user contacts.
         public async Task<ICollection<Contact>?> GetAllContacts(string username)
         {
-            using var context = _context;
-
-            var contacts = await context.Contacts.Where(contact => contact.ContactOfUsername == username).ToListAsync();
+            var contacts = await _context.Contacts.Where(contact => contact.ContactOfUsername == username).ToListAsync();
 
             return contacts;
 
@@ -28,21 +26,18 @@ namespace whenAppModel.Services
 
         public async Task<ICollection<Contact>?> GetAllContacts(User user)
         {
-            using var context = _context;
             if (user == null)
             {
                 return null;
             }
-            return await context.Contacts.Where(contact => contact.ContactOfUsername == user.Username).ToListAsync();
+            return await _context.Contacts.Where(contact => contact.ContactOfUsername == user.Username).ToListAsync();
 
         }
 
         //Function that return the user in contact format(id, name, server, last, lastdate)
         public async Task<Contact?> GetContact(string contactOf, string contactUsername)
         {
-            using var context = _context;
-
-            var contacts = await context.Contacts.FindAsync(contactUsername, contactOf);
+            var contacts = await _context.Contacts.FindAsync(contactUsername, contactOf);
 
             return contacts;
         }
@@ -55,25 +50,22 @@ namespace whenAppModel.Services
                 return false;
             }
 
-            using var context = _context;
-
-            var isExists = await context.Contacts.FindAsync(contactUsername, contactOf) != null;
+            var isExists = await _context.Contacts.FindAsync(contactUsername, contactOf) != null;
             if (isExists)
             {
                 return false;
             }
 
             Contact contact = new Contact(contactUsername, contactNick, contactServer, contactOf);
-            await context.Contacts.AddAsync(contact);
-            await context.SaveChangesAsync();
+            await _context.Contacts.AddAsync(contact);
+            await _context.SaveChangesAsync();
             return true;
         }
 
         //Function that update contact
         public async Task<bool> UpdateContact(string contactOf, string contactUsername, string newNick, string newServer)
         {
-            using var context = _context;
-            var m = await context.Contacts.FindAsync(contactUsername, contactOf);
+            var m = await _context.Contacts.FindAsync(contactUsername, contactOf);
 
             if (m == null)
             {
@@ -82,7 +74,7 @@ namespace whenAppModel.Services
 
             m.ContactNickname = newNick;
             m.Server = newServer;
-            await context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return true;
         }
@@ -90,16 +82,15 @@ namespace whenAppModel.Services
         //Function that delete contact.
         public async Task<bool> DeleteContact(string contactOf, string contactUsername)
         {
-            using var context = _context;
-            var m = await context.Contacts.FindAsync(contactUsername, contactOf);
+            var m = await _context.Contacts.FindAsync(contactUsername, contactOf);
 
             if (m == null)
             {
                 return false;
             }
 
-            context.Contacts.Remove(m);
-            await context.SaveChangesAsync();
+            _context.Contacts.Remove(m);
+            await _context.SaveChangesAsync();
 
             return true;
 
