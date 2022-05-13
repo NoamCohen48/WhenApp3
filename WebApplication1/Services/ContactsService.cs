@@ -20,7 +20,9 @@ namespace whenAppModel.Services
         {
             using var context = _context;
 
-            return await context.Contacts.Where(contact => contact.ContactOfUsername == username).ToListAsync();
+            var contacts = await context.Contacts.Where(contact => contact.ContactOfUsername == username).ToListAsync();
+
+            return contacts;
 
         }
 
