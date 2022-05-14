@@ -56,6 +56,12 @@ namespace whenAppModel.Services
             _context.Messages.Add(new Message(from, to, content));
 
             await _context.SaveChangesAsync();
+
+            var contacts = await _context.Contacts.FindAsync(to, from);
+
+            contacts.LastMessage = content;
+
+            await _context.SaveChangesAsync();
         }
 
         //action number 4
