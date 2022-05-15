@@ -51,17 +51,23 @@ namespace whenAppModel.Services
         }
 
         //action number 2
-        public async Task AddMessage(string from, string to, string content)
+        public async Task<Message?> AddMessage(string from, string to, string content)
         {
-            _context.Messages.Add(new Message(from, to, content));
+            var contact = await _context.Contacts.FindAsync(to, from);
+
+            if (contact == null)
+                return null;
+
+            contact.LastMessage = content;
+            contact.LastMessageDate = DateTime.Now.ToString();
+
+            var message = new Message(from, to, content);
+
+            _context.Messages.Add(message);
 
             await _context.SaveChangesAsync();
 
-            var contacts = await _context.Contacts.FindAsync(to, from);
-
-            contacts.LastMessage = content;
-
-            await _context.SaveChangesAsync();
+            return message;
         }
 
         //action number 4

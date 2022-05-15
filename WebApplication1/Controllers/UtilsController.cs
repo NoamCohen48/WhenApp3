@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using WebApplication1.Hubs;
 using whenAppModel.Services;
 
 namespace WhenUp.Controllers
@@ -12,12 +14,14 @@ namespace WhenUp.Controllers
         private readonly IMessageService _messagesService;
         private readonly IContactsService _contactService;
         private readonly IUsersService _userService;
+        private readonly IHubContext<ChatHub> _hubContext;
 
-        public UtilsController(IContactsService ContactService, IUsersService UserService, IMessageService MessageService)
+        public UtilsController(IContactsService ContactService, IUsersService UserService, IMessageService MessageService, IHubContext<ChatHub> HubContext)
         {
             _contactService = ContactService;
             _userService = UserService;
             _messagesService = MessageService;
+            _hubContext = HubContext;
         }
 
         public class UtilsPayload
@@ -37,6 +41,7 @@ namespace WhenUp.Controllers
             string? server = payload.server;
 
             await _contactService.AddContact(to, from, from, server);
+            await _hubContext.Clients.Group(to).SendAsync("MessageReceived");
             return Ok();
         }
 
@@ -49,10 +54,16 @@ namespace WhenUp.Controllers
             string? content = payload.content;
 
             // if from is in my server
-            if (await _userService.Get(from) == null)
+            if (await _userService.Get(from) != null)
+            {
+                await _contactService.UpdateContactLast(to, from, content);
+            }
+            else
             {
                 await _messagesService.AddMessage(from, to, content);
             }
+            await _hubContext.Clients.Group(to).SendAsync("MessageReceived");
+
             return Ok();
         }
         

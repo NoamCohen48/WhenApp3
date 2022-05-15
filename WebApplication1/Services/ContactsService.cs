@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using whenAppModel.Models;
 using WhenUp;
 
@@ -74,6 +73,21 @@ namespace whenAppModel.Services
 
             m.ContactNickname = newNick;
             m.Server = newServer;
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> UpdateContactLast(string contactOf, string contactUsername, string content)
+        {
+            var contact = await _context.Contacts.FindAsync(contactUsername, contactOf);
+
+            if (contact == null)
+                return false;
+
+            contact.LastMessage = content;
+            contact.LastMessageDate = DateTime.Now.ToString();
+
             await _context.SaveChangesAsync();
 
             return true;

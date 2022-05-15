@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using WebApplication1.Hubs;
 using WebApplication1.Services;
 using whenAppModel.Services;
 using WhenUp;
@@ -20,6 +21,8 @@ builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<IAuthenticationService, JWTService>();
 
+builder.Services.AddSignalR();
+builder.Services.AddSingleton<IDictionary<string, string>>(sp => new Dictionary<string, string>());
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
@@ -68,5 +71,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<ChatHub>("/Chat");
 
 app.Run();

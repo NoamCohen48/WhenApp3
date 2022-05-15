@@ -11,8 +11,15 @@ namespace WebApplication1.Hubs
             _connections = Connections;
         }
 
+        public override async Task OnConnectedAsync()
+        {
+            
+            await base.OnConnectedAsync();
+        }
+
         public async Task Connect(string username)
         {
+            await Groups.AddToGroupAsync(Context.ConnectionId, username);
             if (!_connections.TryGetValue(username, out _))
             {
                 _connections.Add(username, Context.ConnectionId);
@@ -27,18 +34,21 @@ namespace WebApplication1.Hubs
             }
         }
 
-        public override Task OnDisconnectedAsync(Exception? exception)
+        public class SignalMessagePayload
         {
-            return base.OnDisconnectedAsync(exception);
+            public string? from { get; set; }
+            public string? to { get; set; }
+            public string? content { get; set; }
         }
-
-        public async Task SignalMessage(string from, string to, string content)
+        public async Task MessageReceived(string to)
         {
             // if is connected
-            if (_connections.TryGetValue(to, out string? connectionId))
-            {
-                await Clients.Client(connectionId).SendAsync("SignalMessage", content);
-            }
+            await Clients.Group(to).SendAsync("MessageReceived");
+            //await Clients.Client(Context.ConnectionId).SendAsync("SignalMessage", from, content);
+            //if (_connections.TryGetValue(to, out string? connectionId))
+            //{
+            //    await Clients.Client(connectionId).SendAsync("SignalMessage", from, content);
+            //}
         }
     }
 }
