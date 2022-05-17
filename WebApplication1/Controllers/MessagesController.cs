@@ -58,10 +58,15 @@ namespace WhenUp.Controllers
         //action number 2
         [HttpPost]
         [ActionName("Index")]
-        public async Task SendMessageToUser(string id, [FromBody] MessagesPayload payload)
+        public async Task<IActionResult> SendMessageToUser(string id, [FromBody] MessagesPayload payload)
         {
             var user = await GetCurrentUser();
-            await MessagesService.AddMessage(user.Username, id, payload.content);
+
+            if (await MessagesService.AddMessage(user.Username, id, payload.content) == null)
+            {
+                return BadRequest(new { message = "the contcat is not exsist" });
+            };
+            return Ok();
         }
 
         //action number 3
@@ -77,18 +82,26 @@ namespace WhenUp.Controllers
         [Route("{id2}")]
         [ActionName("Index")]
         //action number 4
-        public async Task UpdateMessage(int id, [FromBody] MessagesPayload payload)
+        public async Task<IActionResult> UpdateMessage(int id, [FromBody] MessagesPayload payload)
         {
-            await MessagesService.UpdateMessage(id, payload.content);
+            if (!await MessagesService.UpdateMessage(id, payload.content))
+            {
+                return BadRequest(new { message = "the message is not exsist" });
+            };
+            return Ok();
         }
 
         [HttpDelete]
         [Route("{id2}")]
         [ActionName("Index")]
         //action number 5
-        public async Task DeleteMessage(int id)
+        public async Task<IActionResult> DeleteMessage(int id)
         {
-            await MessagesService.RemoveMessage(id);
+            if (!await MessagesService.RemoveMessage(id))
+            {
+                return BadRequest(new { message = "the message is not exsist" });
+            }
+            return Ok();
         }
 
     }

@@ -56,16 +56,25 @@ namespace WhenUp.Controllers
         //POST: Contacts - action number 2
         [HttpPost]
         [ActionName("Index")]
-        public async Task AddContact([FromBody] ContactsPayload payload)
+        public async Task<IActionResult> AddContact([FromBody] ContactsPayload payload)
         {
             User currentUser = await GetCurrentUser();
             if (currentUser != null)
             {
+                if (await contactService.GetContact(currentUser.Username,payload.id) != null)
+                {
+                    return BadRequest(new { message = "the contact is already exists" });
+                }
+                if (await userService.Get(payload.id) == null)
+                {
+                    return BadRequest(new { message = "the contact is not exists" });
+                }
                 await contactService.AddContact(currentUser.Username, payload.id, payload.name, payload.server);
+                return Ok();
             }
             else
             {
-                NotFound();
+                return NotFound();
             }
         }
 
@@ -84,6 +93,10 @@ namespace WhenUp.Controllers
             }
             User currentUser = await GetCurrentUser();
             Contact contact = await contactService.GetContact(currentUser.Username,id);
+            if (contact == null)
+            {
+                return BadRequest(new { message = "he is not your contact" }); 
+            }
 
             return Ok(contact);
         }
@@ -114,7 +127,10 @@ namespace WhenUp.Controllers
         {
             User currentUser = await GetCurrentUser();
 
-            await contactService.DeleteContact(currentUser.Username,id);
+            if (! await contactService.DeleteContact(currentUser.Username,id))
+            {
+                return BadRequest(new { message = "the contcat is not exsist" });
+            }
             return Ok();
         }
     }

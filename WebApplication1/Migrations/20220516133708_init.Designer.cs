@@ -11,8 +11,8 @@ using WhenUp;
 namespace WhenAppApi.Migrations
 {
     [DbContext(typeof(WhenAppContext))]
-    [Migration("20220512111456_Init")]
-    partial class Init
+    [Migration("20220516133708_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
