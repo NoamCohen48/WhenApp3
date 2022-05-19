@@ -50,8 +50,9 @@ namespace WhenUp.Controllers
                 id = message.Id,
                 content = message.Content,
                 created = message.Created,
-                sent = message.From == id
+                sent = message.From == user.Username
             }).OrderBy(m => m.created).ToList();
+
             return Ok(r);
         }
 

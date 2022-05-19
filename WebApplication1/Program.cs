@@ -22,7 +22,6 @@ builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<IAuthenticationService, JWTService>();
 
 builder.Services.AddSignalR();
-builder.Services.AddSingleton<IDictionary<string, string>>(sp => new Dictionary<string, string>());
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
