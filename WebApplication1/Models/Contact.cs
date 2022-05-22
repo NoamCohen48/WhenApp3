@@ -12,7 +12,7 @@ namespace whenAppModel.Models
             ContactNickname = string.Empty;
             Server = string.Empty;
             LastMessage = string.Empty;
-            LastMessageDate = string.Empty;
+            LastMessageDate = null;
             ContactOfUsername = string.Empty;
         }
 
@@ -22,7 +22,7 @@ namespace whenAppModel.Models
             ContactNickname=name;
             Server=server;
             LastMessage= string.Empty;
-            LastMessageDate= string.Empty;
+            LastMessageDate= null;
             ContactOfUsername=user;
         }
 
@@ -42,7 +42,7 @@ namespace whenAppModel.Models
         public string LastMessage { get; set; }
 
         [JsonPropertyName("lastdate")]
-        public string LastMessageDate { get; set; }
+        public DateTime? LastMessageDate { get; set; }
 
         [Key]
         //[JsonIgnore]

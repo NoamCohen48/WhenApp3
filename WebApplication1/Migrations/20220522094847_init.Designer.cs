@@ -11,7 +11,7 @@ using WhenUp;
 namespace WhenAppApi.Migrations
 {
     [DbContext(typeof(WhenAppContext))]
-    [Migration("20220516133708_init")]
+    [Migration("20220522094847_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,9 +37,8 @@ namespace WhenAppApi.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("LastMessageDate")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<DateTime?>("LastMessageDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Server")
                         .IsRequired()

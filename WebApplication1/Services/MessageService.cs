@@ -59,7 +59,7 @@ namespace whenAppModel.Services
                 return null;
 
             contact.LastMessage = content;
-            contact.LastMessageDate = DateTime.Now.ToString();
+            contact.LastMessageDate = DateTime.Now;
 
             var message = new Message(from, to, content);
 

@@ -86,7 +86,7 @@ namespace whenAppModel.Services
                 return false;
 
             contact.LastMessage = content;
-            contact.LastMessageDate = DateTime.Now.ToString();
+            contact.LastMessageDate = DateTime.Now;
 
             await _context.SaveChangesAsync();
 

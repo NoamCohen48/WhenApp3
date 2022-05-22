@@ -27,8 +27,7 @@ namespace WhenAppApi.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     LastMessage = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    LastMessageDate = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    LastMessageDate = table.Column<DateTime>(type: "datetime(6)", nullable: true)
                 },
                 constraints: table =>
                 {

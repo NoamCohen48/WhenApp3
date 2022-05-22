@@ -35,9 +35,8 @@ namespace WhenAppApi.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("LastMessageDate")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<DateTime?>("LastMessageDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Server")
                         .IsRequired()
