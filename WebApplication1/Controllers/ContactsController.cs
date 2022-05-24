@@ -65,10 +65,7 @@ namespace WhenUp.Controllers
                 {
                     return BadRequest(new { message = "the contact is already exists" });
                 }
-                if (await userService.Get(payload.id) == null)
-                {
-                    return BadRequest(new { message = "the contact is not exists" });
-                }
+               
                 await contactService.AddContact(currentUser.Username, payload.id, payload.name, payload.server);
                 return Ok();
             }
