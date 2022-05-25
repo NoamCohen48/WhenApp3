@@ -74,18 +74,23 @@ namespace WhenUp.Controllers
         [HttpGet]
         [Route("{id2}")]
         [ActionName("Index")]
-        public async Task<IActionResult?> GetMessageById(int id)
+        public async Task<IActionResult?> GetMessageById(int id2)
         {
-            return Ok(await MessagesService.GetMessage(id));
+            var message = await MessagesService.GetMessage(id2);
+            if (message == null)
+            {
+                return NotFound();
+            }
+            return Ok(message);
         }
 
         [HttpPut]
         [Route("{id2}")]
         [ActionName("Index")]
         //action number 4
-        public async Task<IActionResult> UpdateMessage(int id, [FromBody] MessagesPayload payload)
+        public async Task<IActionResult> UpdateMessage(int id2, [FromBody] MessagesPayload payload)
         {
-            if (!await MessagesService.UpdateMessage(id, payload.content))
+            if (!await MessagesService.UpdateMessage(id2, payload.content))
             {
                 return BadRequest(new { message = "the message is not exsist" });
             };
@@ -96,9 +101,9 @@ namespace WhenUp.Controllers
         [Route("{id2}")]
         [ActionName("Index")]
         //action number 5
-        public async Task<IActionResult> DeleteMessage(int id)
+        public async Task<IActionResult> DeleteMessage(int id2)
         {
-            if (!await MessagesService.RemoveMessage(id))
+            if (!await MessagesService.RemoveMessage(id2))
             {
                 return BadRequest(new { message = "the message is not exsist" });
             }
