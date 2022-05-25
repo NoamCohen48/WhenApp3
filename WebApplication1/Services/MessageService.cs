@@ -30,7 +30,7 @@ namespace whenAppModel.Services
         }
 
         //action number 1
-        public async Task<ICollection<Message>?> GetMessagesBetween(string user1, string user2)
+        public async Task<ICollection<Message>> GetMessagesBetween(string user1, string user2)
         {
             var user1sent = _context.Messages
                 .Where(message => message.From == user1 && message.To == user2);

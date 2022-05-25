@@ -1,5 +1,4 @@
-﻿#nullable disable
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using WhenUp;
 using whenAppModel.Models;
 using whenAppModel.Services;
@@ -33,7 +32,6 @@ namespace WhenUp.Controllers
         [NonAction]
         public async Task<User> GetCurrentUser()
         {
-
             var user = HttpContext.User.FindFirst("UserId")?.Value;
             return await userService.Get(user);
         }
@@ -63,9 +61,14 @@ namespace WhenUp.Controllers
         {
             var user = await GetCurrentUser();
 
+            if (payload.content == null)
+            {
+                return BadRequest(new { message = "no content" });
+            }
+
             if (await MessagesService.AddMessage(user.Username, id, payload.content) == null)
             {
-                return BadRequest(new { message = "the contcat is not exsist" });
+                return BadRequest(new { message = "the contcact is not exsist" });
             };
             return Created("SendMessageToUser", null);
         }
@@ -74,38 +77,60 @@ namespace WhenUp.Controllers
         [HttpGet]
         [Route("{id2}")]
         [ActionName("Index")]
-        public async Task<IActionResult?> GetMessageById(int id2)
+        public async Task<IActionResult> GetMessageById(string id, int id2)
         {
             var message = await MessagesService.GetMessage(id2);
             if (message == null)
             {
-                return NotFound();
+                return BadRequest();
             }
-            return Ok(message);
+            if (message.From == id || message.To == id)
+            {
+                return Ok(message);
+            }
+            return BadRequest();
         }
 
         [HttpPut]
         [Route("{id2}")]
         [ActionName("Index")]
         //action number 4
-        public async Task<IActionResult> UpdateMessage(int id2, [FromBody] MessagesPayload payload)
+        public async Task<IActionResult> UpdateMessage(string id, int id2, [FromBody] MessagesPayload payload)
         {
-            if (!await MessagesService.UpdateMessage(id2, payload.content))
+            var message = await MessagesService.GetMessage(id2);
+            if (message == null)
             {
                 return BadRequest(new { message = "the message is not exsist" });
+            }
+            if (!(message.From == id || message.To == id))
+            {
+                return BadRequest();
+            }
+            if (!await MessagesService.UpdateMessage(id2, payload.content))
+            {
+                return BadRequest(new { message = "there was a problem" });
             };
-            return NoContent();
+            return Ok();
         }
 
         [HttpDelete]
         [Route("{id2}")]
         [ActionName("Index")]
         //action number 5
-        public async Task<IActionResult> DeleteMessage(int id2)
+        public async Task<IActionResult> DeleteMessage(string id, int id2)
         {
-            if (!await MessagesService.RemoveMessage(id2))
+            var message = await MessagesService.GetMessage(id2);
+            if (message == null)
             {
                 return BadRequest(new { message = "the message is not exsist" });
+            }
+            if (!(message.From == id || message.To == id))
+            {
+                return BadRequest();
+            }
+            if (!await MessagesService.RemoveMessage(id2))
+            {
+                return BadRequest(new { message = "there was a problem" });
             }
             return NoContent();
         }
