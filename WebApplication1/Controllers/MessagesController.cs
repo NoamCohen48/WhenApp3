@@ -30,9 +30,10 @@ namespace WhenUp.Controllers
 
         [HttpGet]
         [NonAction]
-        public async Task<User> GetCurrentUser()
+        public async Task<User?> GetCurrentUser()
         {
             var user = HttpContext.User.FindFirst("UserId")?.Value;
+            if (user == null) return null;
             return await userService.Get(user);
         }
 
@@ -82,13 +83,13 @@ namespace WhenUp.Controllers
             var message = await MessagesService.GetMessage(id2);
             if (message == null)
             {
-                return BadRequest();
+                return BadRequest(new { message = "message was not found" });
             }
             if (message.From == id || message.To == id)
             {
                 return Ok(message);
             }
-            return BadRequest();
+            return BadRequest(new { message = "message is not of contact" });
         }
 
         [HttpPut]
@@ -104,7 +105,7 @@ namespace WhenUp.Controllers
             }
             if (!(message.From == id || message.To == id))
             {
-                return BadRequest();
+                return BadRequest(new { message = "message is not of contact" });
             }
             if (!await MessagesService.UpdateMessage(id2, payload.content))
             {
@@ -126,7 +127,7 @@ namespace WhenUp.Controllers
             }
             if (!(message.From == id || message.To == id))
             {
-                return BadRequest();
+                return BadRequest(new { message = "message is not of contact" });
             }
             if (!await MessagesService.RemoveMessage(id2))
             {

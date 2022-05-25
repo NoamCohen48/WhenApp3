@@ -10,7 +10,7 @@ namespace WhenUp.Controllers
     [Route("api/[controller]")]
     public class ContactsController : ControllerBase
     {
-        
+
         private readonly IContactsService contactService;
         private readonly IUsersService userService;
 
@@ -32,6 +32,7 @@ namespace WhenUp.Controllers
         public async Task<User?> GetCurrentUser()
         {
             var user = User.FindFirst("UserId")?.Value;
+            if (user == null) return null;
             //Request.Headers
             return await userService.Get(user);
         }
@@ -51,21 +52,19 @@ namespace WhenUp.Controllers
             return NotFound("token is incorrect");
         }
 
-
-        
         //POST: Contacts - action number 2
         [HttpPost]
         [ActionName("Index")]
         public async Task<IActionResult> AddContact([FromBody] ContactsPayload payload)
         {
-            User currentUser = await GetCurrentUser();
+            User? currentUser = await GetCurrentUser();
             if (currentUser != null)
             {
-                if (await contactService.GetContact(currentUser.Username,payload.id) != null)
+                if (await contactService.GetContact(currentUser.Username, payload.id) != null)
                 {
                     return BadRequest(new { message = "the contact is already exists" });
                 }
-               
+
                 await contactService.AddContact(currentUser.Username, payload.id, payload.name, payload.server);
                 return Created("AddContact", null);
             }
@@ -77,7 +76,7 @@ namespace WhenUp.Controllers
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        
+
         //GET: Contacts/id - action number 3
         [Route("{id}")]
         [HttpGet]
@@ -89,15 +88,14 @@ namespace WhenUp.Controllers
                 return BadRequest();
             }
             User currentUser = await GetCurrentUser();
-            Contact contact = await contactService.GetContact(currentUser.Username,id);
+            Contact contact = await contactService.GetContact(currentUser.Username, id);
             if (contact == null)
             {
-                return BadRequest(new { message = "he is not your contact" }); 
+                return BadRequest(new { message = "he is not your contact" });
             }
-
             return Ok(contact);
         }
-        
+
 
         //PUT: Contacts/id - action number 4
         [HttpPut]
@@ -111,7 +109,7 @@ namespace WhenUp.Controllers
             if (contact == null)
                 return NotFound();
 
-            await contactService.UpdateContact(currentUser.Username,id, payload.name, payload.server);
+            await contactService.UpdateContact(currentUser.Username, id, payload.name, payload.server);
 
             return NoContent();
         }
@@ -124,7 +122,7 @@ namespace WhenUp.Controllers
         {
             User currentUser = await GetCurrentUser();
 
-            if (! await contactService.DeleteContact(currentUser.Username,id))
+            if (!await contactService.DeleteContact(currentUser.Username, id))
             {
                 return BadRequest(new { message = "the contcat is not exsist" });
             }
