@@ -67,7 +67,7 @@ namespace WhenUp.Controllers
             {
                 return BadRequest(new { message = "the contcat is not exsist" });
             };
-            return Ok();
+            return Created("SendMessageToUser", null);
         }
 
         //action number 3
@@ -89,7 +89,7 @@ namespace WhenUp.Controllers
             {
                 return BadRequest(new { message = "the message is not exsist" });
             };
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete]
@@ -102,7 +102,7 @@ namespace WhenUp.Controllers
             {
                 return BadRequest(new { message = "the message is not exsist" });
             }
-            return Ok();
+            return NoContent();
         }
 
     }

@@ -42,7 +42,7 @@ namespace WhenUp.Controllers
 
             await _contactService.AddContact(to, from, from, server);
             await _hubContext.Clients.Group(to).SendAsync("MessageReceived");
-            return Ok();
+            return Created("Invitations", null);
         }
 
         [HttpPost]
@@ -64,7 +64,7 @@ namespace WhenUp.Controllers
             }
             await _hubContext.Clients.Group(to).SendAsync("MessageReceived");
 
-            return Ok();
+            return Created("Transfer", null);
         }
         
     }

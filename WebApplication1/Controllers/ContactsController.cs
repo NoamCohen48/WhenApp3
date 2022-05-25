@@ -67,7 +67,7 @@ namespace WhenUp.Controllers
                 }
                
                 await contactService.AddContact(currentUser.Username, payload.id, payload.name, payload.server);
-                return Ok();
+                return Created("AddContact", null);
             }
             else
             {
@@ -99,7 +99,7 @@ namespace WhenUp.Controllers
         }
         
 
-        //PUT: Contacts/id - action number 2
+        //PUT: Contacts/id - action number 4
         [HttpPut]
         [Route("{id}")]
         [ActionName("Index")]
@@ -113,10 +113,10 @@ namespace WhenUp.Controllers
 
             await contactService.UpdateContact(currentUser.Username,id, payload.name, payload.server);
 
-            return Ok();
+            return NoContent();
         }
 
-        //POST: Contacts/id - action number 2
+        //POST: Contacts/id - action number 5
         [HttpDelete]
         [Route("{id}")]
         [ActionName("Index")]
@@ -128,7 +128,7 @@ namespace WhenUp.Controllers
             {
                 return BadRequest(new { message = "the contcat is not exsist" });
             }
-            return Ok();
+            return NoContent();
         }
     }
 }
