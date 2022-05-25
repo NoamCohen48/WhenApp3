@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WhenUp;
 using whenAppModel.Models;
 using whenAppModel.Services;
 using Microsoft.AspNetCore.Authorization;
